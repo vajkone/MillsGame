@@ -1,6 +1,7 @@
 package mills.javafx.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
 import javafx.scene.paint.Color;
@@ -8,8 +9,13 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.inject.Inject;
+
 @Slf4j
 public class GameController {
+
+    @Inject
+    private FXMLLoader fxmlLoader;
 
     @FXML
     private Label testLabel;
@@ -17,8 +23,40 @@ public class GameController {
     @FXML
     private Shape spot11;
 
+    @FXML
+    private Label phaseText;
+
+    private String playerNameOne, playerNameTwo;
+
+    @FXML
+    private Label playerNameOneLabel;
+
+    @FXML
+    private Label playerNameTwoLabel;
+
+
+
+
+
+    private int phase;
+
     private Paint dragPaint;
     private Paint previousPaint;
+
+    public void setPlayerNames(String playerName1, String playerName2) {
+        this.playerNameTwo = playerName2;
+        this.playerNameOne=playerName1;
+        playerNameOneLabel.setText(playerName1);
+        playerNameTwoLabel.setText(playerName2);
+    }
+
+
+    @FXML
+    public void initialize() {
+        phase=1;
+        phaseText.setText("Phase 1");
+
+    }
 
 
 
@@ -83,7 +121,6 @@ public class GameController {
 
         Shape clicked=(Shape) event.getTarget();
         clicked.setFill(previousPaint);
-        //clicked.setFill(dragPaint);
         System.out.println("drag exited");
     }
 

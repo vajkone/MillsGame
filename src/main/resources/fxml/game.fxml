@@ -8,36 +8,36 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mills.javafx.controller.GameController">
    <children>
-      <Circle fx:id="spot11" fill="#116eba" layoutX="27.0" layoutY="27.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot11" fill="WHITE" layoutX="27.0" layoutY="27.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
       <Line endX="100.0" layoutX="175.0" layoutY="26.0" startX="-135.0" startY="1.0" />
-      <Circle fill="#ededed00" layoutX="289.0" layoutY="27.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="WHITE" layoutX="289.0" layoutY="27.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
       <Line endX="135.0" layoutX="403.0" layoutY="25.0" startX="-100.0" />
-      <Circle fx:id="spot111" fill="#116eba" layoutX="27.0" layoutY="437.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot111" fill="WHITE" layoutX="27.0" layoutY="437.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
       <Line endX="100.0" layoutX="175.0" layoutY="437.0" startX="-135.0" />
-      <Circle fill="#faf7f7" layoutX="289.0" layoutY="437.0" onDragDetected="#dragStarted" onDragDropped="#dragDropped" onDragEntered="#dragEntered" onDragExited="#dragExited" onDragOver="#dragOver" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="WHITE" layoutX="289.0" layoutY="437.0" onDragDetected="#dragStarted" onDragDropped="#dragDropped" onDragEntered="#dragEntered" onDragExited="#dragExited" onDragOver="#dragOver" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
       <Line endX="135.0" layoutX="403.0" layoutY="437.0" startX="-100.0" />
-      <Circle fx:id="spot1111" fill="#116eba" layoutX="391.0" layoutY="167.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot11111" fill="#116eba" layoutX="289.0" layoutY="167.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot111111" fill="#116eba" layoutX="27.0" layoutY="232.0" onDragDetected="#dragStarted" onDragDone="#handleDragDone" onDragOver="#dragOver" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot1111111" fill="#116eba" layoutX="187.0" layoutY="232.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot11111111" fill="#116eba" layoutX="107.0" layoutY="367.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot111111111" fill="#116eba" layoutX="187.0" layoutY="167.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot1111111111" fill="#116eba" layoutX="289.0" layoutY="367.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot11111111111" fill="#116eba" layoutX="391.0" layoutY="297.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot111111111111" fill="#116eba" layoutX="391.0" layoutY="232.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot111112" fill="#116eba" layoutX="471.0" layoutY="367.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot1111122" fill="#116eba" layoutX="289.0" layoutY="297.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot11111221" fill="#116eba" layoutX="471.0" layoutY="97.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot11111222" fill="#116eba" layoutX="471.0" layoutY="232.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot111112221" fill="#116eba" layoutX="289.0" layoutY="97.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot11111211" fill="#116eba" layoutX="187.0" layoutY="297.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot11111223" fill="#116eba" layoutX="107.0" layoutY="232.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot111112111" fill="#116eba" layoutX="107.0" layoutY="97.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot1111" fill="WHITE" layoutX="391.0" layoutY="167.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot11111" fill="WHITE" layoutX="289.0" layoutY="167.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot111111" fill="WHITE" layoutX="27.0" layoutY="232.0" onDragDetected="#dragStarted" onDragDone="#handleDragDone" onDragOver="#dragOver" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot1111111" fill="WHITE" layoutX="187.0" layoutY="232.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot11111111" fill="WHITE" layoutX="107.0" layoutY="367.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot111111111" fill="WHITE" layoutX="187.0" layoutY="167.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot1111111111" fill="WHITE" layoutX="289.0" layoutY="367.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot11111111111" fill="WHITE" layoutX="391.0" layoutY="297.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot111111111111" fill="WHITE" layoutX="391.0" layoutY="232.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot111112" fill="WHITE" layoutX="471.0" layoutY="367.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot1111122" fill="WHITE" layoutX="289.0" layoutY="297.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot11111221" fill="WHITE" layoutX="471.0" layoutY="97.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot11111222" fill="WHITE" layoutX="471.0" layoutY="232.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot111112221" fill="WHITE" layoutX="289.0" layoutY="97.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot11111211" fill="WHITE" layoutX="187.0" layoutY="297.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot11111223" fill="WHITE" layoutX="107.0" layoutY="232.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot111112111" fill="WHITE" layoutX="107.0" layoutY="97.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
       <Line endX="90.0" layoutX="27.0" layoutY="335.0" rotate="90.0" startX="-90.0" />
       <Line endX="70.0" layoutX="47.0" layoutY="130.0" rotate="-90.0" startX="-110.0" />
-      <Circle fx:id="spot112" fill="#116eba" layoutX="551.0" layoutY="27.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot1112" fill="#116eba" layoutX="551.0" layoutY="437.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="spot1111112" fill="#116eba" layoutX="551.0" layoutY="232.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot112" fill="WHITE" layoutX="551.0" layoutY="27.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot1112" fill="WHITE" layoutX="551.0" layoutY="437.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="spot1111112" fill="WHITE" layoutX="551.0" layoutY="232.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
       <Line endX="90.0" layoutX="552.0" layoutY="335.0" rotate="90.0" startX="-90.0" />
       <Line endX="70.0" layoutX="571.0" layoutY="130.0" rotate="90.0" startX="-110.0" />
       <Line endX="65.0" layoutX="211.0" layoutY="367.0" startX="-90.0" />
@@ -56,14 +56,14 @@
       <Line layoutX="411.0" layoutY="200.0" rotate="90.0" startX="-40.0" />
       <Line layoutX="207.0" layoutY="200.0" rotate="90.0" startX="-40.0" />
       <Line layoutX="207.0" layoutY="265.0" rotate="90.0" startX="-40.0" />
-      <Label layoutX="701.0" layoutY="13.0" text="Phase #" textAlignment="CENTER">
+      <Label fx:id="phaseText" layoutX="701.0" layoutY="13.0" text="Phase #" textAlignment="CENTER">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
       <VBox layoutX="600.0" layoutY="150.0" prefHeight="111.0" prefWidth="127.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="130.0" text="Player 1s name" textAlignment="CENTER">
+            <Label fx:id="playerNameOneLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="130.0" text="Player 1s name" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -82,7 +82,7 @@
       </VBox>
       <VBox layoutX="750.0" layoutY="150.0" prefHeight="111.0" prefWidth="127.0">
          <children>
-            <Label alignment="CENTER" prefHeight="25.0" prefWidth="130.0" text="Player 2s name" textAlignment="CENTER">
+            <Label fx:id="playerNameTwoLabel" alignment="CENTER" prefHeight="25.0" prefWidth="130.0" text="Player 2s name" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>

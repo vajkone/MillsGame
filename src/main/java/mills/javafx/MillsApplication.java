@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
+import mills.javafx.controller.GameController;
 import mills.results.GameResultDao;
 import util.guice.PersistenceModule;
 
@@ -40,6 +41,7 @@ public class MillsApplication extends Application {
         context.init();
         fxmlLoader.setLocation(getClass().getResource("/fxml/launch.fxml"));
         Parent root = fxmlLoader.load();
+
         primaryStage.setTitle("Mills Game");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
