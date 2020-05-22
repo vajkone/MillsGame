@@ -1,5 +1,7 @@
 package mills.javafx.controller;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -20,19 +22,31 @@ public class GameController {
     @FXML
     private Label testLabel;
 
-    @FXML
-    private Shape spot11;
+    private IntegerProperty turn = new SimpleIntegerProperty();
+    private IntegerProperty playerOnePieces = new SimpleIntegerProperty();
+    private IntegerProperty playerTwoPieces = new SimpleIntegerProperty();
+
 
     @FXML
     private Label phaseText;
 
     private String playerNameOne, playerNameTwo;
 
+    private Paint playerOneColor=Color.BLACK;
+    private Paint playerTwoColor=Color.DEEPSKYBLUE;
+
     @FXML
     private Label playerNameOneLabel;
 
     @FXML
+    private Label playerOnePiecesLabel;
+    @FXML
+    private Label playerTwoPiecesLabel;
+
+    @FXML
     private Label playerNameTwoLabel;
+    @FXML
+    private Label playerTurnLabel;
 
 
 
@@ -48,6 +62,7 @@ public class GameController {
         this.playerNameOne=playerName1;
         playerNameOneLabel.setText(playerName1);
         playerNameTwoLabel.setText(playerName2);
+        playerTurnLabel.setText(playerNameOne+"'s turn");
     }
 
 
@@ -56,14 +71,43 @@ public class GameController {
         phase=1;
         phaseText.setText("Phase 1");
 
+        turn.set(1);
+        playerOnePieces.set(9);
+        playerTwoPieces.set(9);
+        playerOnePiecesLabel.textProperty().bind(playerOnePieces.asString());
+        playerTwoPiecesLabel.textProperty().bind(playerTwoPieces.asString());
+
     }
 
 
 
     public void slotClicked(MouseEvent mouseEvent){
 
-        Shape clicked=(Shape) mouseEvent.getTarget();
-        clicked.setFill(Color.TRANSPARENT);
+        if (phase==1){
+            Shape clicked=(Shape) mouseEvent.getTarget();
+            //TODO create STATE of game to check whether a player can place his piece on clicked place or not.
+            if (turn.get()%2==1){
+                clicked.setFill(playerOneColor);
+                playerOnePieces.set(playerOnePieces.get()-1);
+                playerTurnLabel.setText(playerNameTwo+"'s turn");
+                log.info("{} has placed a piece on the {} place",playerNameOne,clicked.getId());
+            }else{
+                clicked.setFill(playerTwoColor);
+                playerTwoPieces.set(playerTwoPieces.get()-1);
+                playerTurnLabel.setText(playerNameOne+"'s turn");
+                log.info("{} has placed a piece on the {} place",playerNameTwo,clicked.getId());
+            }
+            turn.set(turn.get()+1);
+            if (playerOnePieces.get()+playerTwoPieces.get()==0){
+                phase=2;
+                phaseText.setText("Phase 2");
+            }
+
+        }
+
+
+
+
 
     }
 
