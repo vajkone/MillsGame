@@ -11,6 +11,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import lombok.extern.slf4j.Slf4j;
 import mills.state.GameState;
+import mills.state.Mill;
 
 import javax.inject.Inject;
 
@@ -37,6 +38,7 @@ public class GameController {
     private Paint playerTwoColor=Color.DEEPSKYBLUE;
     private GameState gameState;
     private int playerTurn;
+    private Mill mill;
 
     @FXML
     private Label playerNameOneLabel;
@@ -80,6 +82,7 @@ public class GameController {
         playerOnePiecesLabel.textProperty().bind(playerOnePieces.asString());
         playerTwoPiecesLabel.textProperty().bind(playerTwoPieces.asString());
         gameState=new GameState();
+
 
     }
 
