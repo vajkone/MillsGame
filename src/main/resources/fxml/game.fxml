@@ -16,12 +16,12 @@
       <Line endX="100.0" layoutX="175.0" layoutY="437.0" startX="-135.0" />
       <Circle fx:id="c63" fill="WHITE" layoutX="289.0" layoutY="437.0" onDragDetected="#dragStarted" onDragDropped="#dragDropped" onDragEntered="#dragEntered" onDragExited="#dragExited" onDragOver="#dragOver" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
       <Line endX="135.0" layoutX="403.0" layoutY="437.0" startX="-100.0" />
-      <Circle fx:id="c34" fill="WHITE" layoutX="391.0" layoutY="167.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="c33" fill="WHITE" layoutX="289.0" layoutY="167.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="c24" fill="WHITE" layoutX="391.0" layoutY="167.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="c23" fill="WHITE" layoutX="289.0" layoutY="167.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fx:id="c30" fill="WHITE" layoutX="27.0" layoutY="232.0" onDragDetected="#dragStarted" onDragDone="#handleDragDone" onDragOver="#dragOver" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fx:id="c32" fill="WHITE" layoutX="187.0" layoutY="232.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fx:id="c51" fill="WHITE" layoutX="107.0" layoutY="367.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="c32" fill="WHITE" layoutX="187.0" layoutY="167.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="c22" fill="WHITE" layoutX="187.0" layoutY="167.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fx:id="c53" fill="WHITE" layoutX="289.0" layoutY="367.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fx:id="c44" fill="WHITE" layoutX="391.0" layoutY="297.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fx:id="c34" fill="WHITE" layoutX="391.0" layoutY="232.0" onMouseClicked="#slotClicked" radius="13.0" stroke="BLACK" strokeType="INSIDE" />

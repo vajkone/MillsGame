@@ -10,8 +10,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import lombok.extern.slf4j.Slf4j;
+import state.GameState;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 
 @Slf4j
 public class GameController {
@@ -34,6 +36,8 @@ public class GameController {
 
     private Paint playerOneColor=Color.BLACK;
     private Paint playerTwoColor=Color.DEEPSKYBLUE;
+    private GameState gameState;
+    private int playerTurn;
 
     @FXML
     private Label playerNameOneLabel;
@@ -76,6 +80,7 @@ public class GameController {
         playerTwoPieces.set(9);
         playerOnePiecesLabel.textProperty().bind(playerOnePieces.asString());
         playerTwoPiecesLabel.textProperty().bind(playerTwoPieces.asString());
+        gameState=new GameState();
 
     }
 
@@ -85,23 +90,33 @@ public class GameController {
 
         if (phase==1){
             Shape clicked=(Shape) mouseEvent.getTarget();
-            //TODO create STATE of game to check whether a player can place his piece on clicked place or not.
-            if (turn.get()%2==1){
-                clicked.setFill(playerOneColor);
-                playerOnePieces.set(playerOnePieces.get()-1);
-                playerTurnLabel.setText(playerNameTwo+"'s turn");
-                log.info("{} has placed a piece on the {} place",playerNameOne,clicked.getId());
-            }else{
-                clicked.setFill(playerTwoColor);
-                playerTwoPieces.set(playerTwoPieces.get()-1);
-                playerTurnLabel.setText(playerNameOne+"'s turn");
-                log.info("{} has placed a piece on the {} place",playerNameTwo,clicked.getId());
+            if (gameState.isValidPlacement(clicked.getId())) {
+
+                if (turn.get() % 2 == 1) {
+
+                    clicked.setFill(playerOneColor);
+                    playerOnePieces.set(playerOnePieces.get() - 1);
+                    playerTurnLabel.setText(playerNameTwo + "'s turn");
+                    gameState.placePieceOnBoard(clicked.getId(), '1');
+                    log.info("{} has placed a piece on the {} place", playerNameOne, clicked.getId());
+
+                } else {
+
+                    clicked.setFill(playerTwoColor);
+                    playerTwoPieces.set(playerTwoPieces.get() - 1);
+                    playerTurnLabel.setText(playerNameOne + "'s turn");
+                    log.info("{} has placed a piece on the {} place", playerNameTwo, clicked.getId());
+                    gameState.placePieceOnBoard(clicked.getId(), '2');
+                }
+                turn.set(turn.get()+1);
             }
-            turn.set(turn.get()+1);
+
+
             if (playerOnePieces.get()+playerTwoPieces.get()==0){
                 phase=2;
                 phaseText.setText("Phase 2");
             }
+
 
         }
 
