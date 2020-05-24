@@ -32,9 +32,45 @@ public enum Mill {
         this.arrayCoords=arrayCoords;
     }
 
+    /**
+     * Return whether the player has formed a mill with his/her most recent move or not
+     *
+     * @param slot the x and y-coordinates of the slot, where the player placed one of his/her pieces
+     * @param playerNum the {@code char} representation of the player that made the move
+     * @param currentBoard array representing the current state of the board
+     * @return {@code true} if the player formed a mill, {@code false} otherwise
+     */
 
+    public static boolean millTest(int[] slot,char playerNum,char[][] currentBoard){
+        Mill test = null;
+        int piececounter=0;
+        for (Mill mill : values()){
+            for (int i = 0; i < 3; i++) {
+                if (mill.arrayCoords.get(i)[0] == slot[0] && mill.arrayCoords.get(i)[1] == slot[1]) {
+                    test = mill;
+                    break;
+                }
+            }
+            if (test!=null) {
+                for (int i = 0; i < 3; i++) {
 
+                    int x = test.arrayCoords.get(i)[0];
+                    int y = test.arrayCoords.get(i)[1];
 
+                    if (currentBoard[x][y] == playerNum) {
+                        piececounter++;
+                    }
+                }
+                if (piececounter == 3) {
+                    return true;
+                } else {
+                    piececounter = 0;
+                    test=null;
+                }
 
+            }
 
+        }
+        return false;
+    }
 }
