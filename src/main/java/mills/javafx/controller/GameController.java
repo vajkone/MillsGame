@@ -10,10 +10,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import lombok.extern.slf4j.Slf4j;
-import state.GameState;
+import mills.state.GameState;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 
 @Slf4j
 public class GameController {
