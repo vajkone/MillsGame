@@ -34,7 +34,7 @@ public class GameState {
 
 
     /**
-     * Creates a {@code GameState} object that represents the initial state of the board
+     * Creates a {@code GameState} object that represents the initial state of the board.
      */
     public GameState() {
         this.Board=INITIAL;
@@ -42,7 +42,7 @@ public class GameState {
 
 
     /**
-     * Checks whether the player can place one of his pieces on the clicked slot
+     * Checks whether the player can place one of his pieces on the clicked slot.
      *
      * @param slot the id of the clicked slot, which determines the slot's place on the board
      *
@@ -55,9 +55,16 @@ public class GameState {
         return Board[row][col] == '0';
     }
 
+    public boolean isValidRemoval(String slot,char playerNum){
+        int row = Integer.parseInt(slot.substring(1,2));
+        int col = Integer.parseInt(slot.substring(2,3));
+
+        return Board[row][col] != playerNum;
+    }
+
 
     /**
-     * Places the player's piece in the array representing the board
+     * Places the player's piece in the array representing the board.
      *
      * @param slot the id of the clicked slot, which determines the slot's place on the board
      *
@@ -68,6 +75,14 @@ public class GameState {
         int col = Integer.parseInt(slot.substring(2,3));
 
         Board[row][col]=playerNum;
+
+    }
+
+    public void removePieceFromBoard(String slot){
+        int row = Integer.parseInt(slot.substring(1,2));
+        int col = Integer.parseInt(slot.substring(2,3));
+
+        Board[row][col]='0';
 
     }
 

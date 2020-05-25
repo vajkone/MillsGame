@@ -109,6 +109,11 @@
       <Line layoutX="311.0" layoutY="402.0" rotate="90.0" startX="-44.0" />
       <Line layoutX="311.0" layoutY="132.0" rotate="90.0" startX="-44.0" />
       <Line layoutX="311.0" layoutY="62.0" rotate="90.0" startX="-44.0" />
+      <Label fx:id="millFormedLabel" alignment="CENTER" layoutX="102.0" layoutY="469.0" prefHeight="83.0" prefWidth="373.0" text="Label" textAlignment="CENTER" textFill="#d01e1e" visible="false" wrapText="true">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
 
    </children>
 </Pane>
