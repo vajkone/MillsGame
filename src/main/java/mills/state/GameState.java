@@ -103,11 +103,18 @@ public class GameState {
 
     }
 
+    /**
+     * Checks all possible moves of the clicked piece.
+     *
+     * @param slot the id of the clicked slot.
+     *
+     * @return the {@code List} of coordinates (in {@code String} format) the clicked piece can move to
+     */
     public ArrayList<String> checkForValidMovement(String slot){
         int row = Integer.parseInt(slot.substring(1,2));
         int col = Integer.parseInt(slot.substring(2,3));
 
-        ArrayList<String> canMoveTo=new ArrayList<String>();
+        ArrayList<String> canMoveTo=new ArrayList<>();
 
 
 
@@ -116,7 +123,7 @@ public class GameState {
                 if (getBoard()[i][col]=='0'){
                     canMoveTo.add(String.valueOf(i)+col);
                     break;
-                }else if(getBoard()[i][col]=='1' || getBoard()[i][col]=='2'){
+                }else if(getBoard()[i][col]=='1' || getBoard()[i][col]=='2'  ){
                     break;
                 }
 
@@ -126,7 +133,7 @@ public class GameState {
                 if (getBoard()[i][col]=='0'){
                     canMoveTo.add(String.valueOf(i)+col);
                     break;
-                }else if(getBoard()[i][col]=='1' || getBoard()[i][col]=='2'){
+                }else if(getBoard()[i][col]=='1' || getBoard()[i][col]=='2' ||getBoard()[i][col]=='*'){
                     break;
                 }
             }
@@ -134,7 +141,7 @@ public class GameState {
                 if (getBoard()[i][col]=='0'){
                     canMoveTo.add(String.valueOf(i)+col);
                     break;
-                }else if(getBoard()[i][col]=='1' || getBoard()[i][col]=='2'){
+                }else if(getBoard()[i][col]=='1' || getBoard()[i][col]=='2'  ||getBoard()[i][col]=='*'){
                     break;
                 }
             }
@@ -143,7 +150,7 @@ public class GameState {
                 if (getBoard()[i][col]=='0'){
                     canMoveTo.add(String.valueOf(i)+col);
                     break;
-                }else if(getBoard()[i][col]=='1' || getBoard()[i][col]=='2'){
+                }else if(getBoard()[i][col]=='1' || getBoard()[i][col]=='2'  ){
                     break;
                 }
             }
@@ -154,7 +161,7 @@ public class GameState {
                 if (getBoard()[row][i]=='0'){
                     canMoveTo.add(String.valueOf(row)+i);
                     break;
-                }else if(getBoard()[row][i]=='1' || getBoard()[row][i]=='2'){
+                }else if(getBoard()[row][i]=='1' || getBoard()[row][i]=='2' ){
                     break;
                 }
 
@@ -164,7 +171,7 @@ public class GameState {
                 if (getBoard()[row][i]=='0'){
                     canMoveTo.add(String.valueOf(row)+i);
                     break;
-                }else if(getBoard()[row][i]=='1' || getBoard()[row][i]=='2'){
+                }else if(getBoard()[row][i]=='1' || getBoard()[row][i]=='2' ||getBoard()[row][i]=='*'){
                     break;
                 }
             }
@@ -172,7 +179,7 @@ public class GameState {
                 if (getBoard()[row][i]=='0'){
                     canMoveTo.add(String.valueOf(row)+i);
                     break;
-                }else if(getBoard()[row][i]=='1' || getBoard()[row][i]=='2'){
+                }else if(getBoard()[row][i]=='1' || getBoard()[row][i]=='2' ||getBoard()[row][i]=='*'){
                     break;
                 }
             }
@@ -181,7 +188,7 @@ public class GameState {
                 if (getBoard()[row][i]=='0'){
                     canMoveTo.add(String.valueOf(row)+i);
                     break;
-                }else if(getBoard()[row][i]=='1' || getBoard()[row][i]=='2'){
+                }else if(getBoard()[row][i]=='1' || getBoard()[row][i]=='2' ){
                     break;
                 }
             }
@@ -190,6 +197,14 @@ public class GameState {
 
         return canMoveTo;
 
+
+    }
+
+    public char getPlayerOfPiece(String slot){
+        int row = Integer.parseInt(slot.substring(1,2));
+        int col = Integer.parseInt(slot.substring(2,3));
+
+        return Board[row][col];
 
     }
 

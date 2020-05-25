@@ -1,5 +1,7 @@
 package mills.javafx.controller;
 
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
@@ -11,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
+import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import mills.state.GameState;
 import mills.state.Mill;
@@ -41,6 +44,9 @@ public class GameController {
     private Paint playerTwoColor=Color.DEEPSKYBLUE;
     private GameState gameState;
     private boolean millFormed=false;
+    private ArrayList<String> validMoves;
+    private boolean hasClicked=false;
+    private Shape previousShape;
 
     @FXML
     private Label playerNameOneLabel;
@@ -92,42 +98,100 @@ public class GameController {
 
 
 
-    public void slotClicked(MouseEvent mouseEvent){
+    public void slotClicked(MouseEvent mouseEvent) {
 
-        if (phase==1){
-            Shape clicked=(Shape) mouseEvent.getTarget();
-            char actingPlayer=' ';
-            switch (turn.get()%2){
-                case 0:
-                    actingPlayer='2';
-                    break;
-                case 1:
-                    actingPlayer='1';
-                    break;
-            }
+        char actingPlayer = ' ';
+        switch (turn.get() % 2) {
+            case 0:
+                actingPlayer = '2';
+                break;
+            case 1:
+                actingPlayer = '1';
+                break;
+        }
+        if (phase == 1) {
+            Shape clicked = (Shape) mouseEvent.getTarget();
 
-            if (gameState.isValidPlacement(clicked.getId())) {
 
-                updateBoardOnPlacement(clicked,actingPlayer);
+            if (gameState.isValidPlacement(clicked.getId()) && !millFormed) {
 
-            }else if(millFormed){
+                updateBoardOnPlacement(clicked, actingPlayer);
+                if (!millFormed) {
+                    turn.set(turn.get() + 1);
+                    updatePlayerTurnLabel(actingPlayer);
+                }
 
-                if (gameState.isValidRemoval(clicked.getId(),actingPlayer)){
-                    updateBoardOnRemoval(clicked,actingPlayer);
+            } else if (millFormed) {
+
+                if (gameState.isValidRemoval(clicked.getId(), actingPlayer)) {
+                    updateBoardOnRemoval(clicked, actingPlayer);
+                    turn.set(turn.get() + 1);
+                    updatePlayerTurnLabel(actingPlayer);
                 }
             }
 
-            if (playerOnePieces.get()+playerTwoPieces.get()==0 && !millFormed){
-                phase=2;
+            if (playerOnePieces.get() + playerTwoPieces.get() == 0 && !millFormed) {
+                phase = 2;
                 phaseText.setText("Phase 2");
             }
 
 
         }
+        else if (phase == 2){
+            Shape clicked = (Shape) mouseEvent.getTarget();
+            if (actingPlayer==gameState.getPlayerOfPiece(clicked.getId()) &&!millFormed) {
+
+
+                if (hasClicked && clicked!=previousShape) {
+                    for (String moves : validMoves) {
+                        String shapeId = "c" + moves;
+                        Shape movable = (Shape) mainPane.lookup("#" + shapeId);
+                        movable.setStroke(Color.BLACK);
+                        movable.setStrokeWidth(1);
+                    }
+                }
+
+                hasClicked = true;
+                previousShape = clicked;
+                validMoves = gameState.checkForValidMovement(clicked.getId());
+                for (String moves : validMoves) {
+                    String shapeId = "c" + moves;
+                    Shape movable = (Shape) mainPane.lookup("#" + shapeId);
+                    movable.setStroke(Color.GREEN);
+                    movable.setStrokeWidth(3);
+                }
+
+
+            }else if (validMoves.contains(clicked.getId().substring(1,3)) && !millFormed){
+                updateBoardOnRemoval(previousShape,actingPlayer);
+                updateBoardOnPlacement(clicked,actingPlayer);
+                if (!millFormed) {
+                    turn.set(turn.get() + 1);
+                    updatePlayerTurnLabel(actingPlayer);
+                }
+                hasClicked=false;
+                for (String moves : validMoves) {
+                    String shapeId = "c" + moves;
+                    Shape movable = (Shape) mainPane.lookup("#" + shapeId);
+                    movable.setStroke(Color.BLACK);
+                    movable.setStrokeWidth(1);
+                }
+            }else if(millFormed) {
+                if (gameState.isValidRemoval(clicked.getId(), actingPlayer)) {
+                    updateBoardOnRemoval(clicked, actingPlayer);
+                    turn.set(turn.get() + 1);
+                    updatePlayerTurnLabel(actingPlayer);
+                }
+            }
+
+
+        }
+
+
 
     }
 
-    public void updateBoardOnRemoval(Shape clicked,char actingPlayer){
+    public void updatePlayerTurnLabel(char actingPlayer){
         String playerNameNext="";
         switch (actingPlayer) {
             case '1':
@@ -137,12 +201,16 @@ public class GameController {
                 playerNameNext = playerNameOne;
                 break;
         }
+
+        playerTurnLabel.setText(playerNameNext+"'s turn");
+    }
+
+    public void updateBoardOnRemoval(Shape clicked,char actingPlayer){
+
         gameState.removePieceFromBoard(clicked.getId());
         clicked.setFill(Color.TRANSPARENT);
         millFormed=false;
         millFormedLabel.setVisible(false);
-        turn.set(turn.get() + 1);
-        playerTurnLabel.setText(playerNameNext+"'s turn");
         if (playerOnePieces.get()+playerTwoPieces.get()==0){
             phase=2;
             phaseText.setText("Phase 2");
@@ -152,18 +220,15 @@ public class GameController {
     public void updateBoardOnPlacement(Shape clicked,char actingPlayer){
         Paint playerColor=null;
         String playerName="";
-        String playerNameNext="";
         switch (actingPlayer){
             case '1':
                 playerColor=playerOneColor;
                 playerName=playerNameOne;
-                playerNameNext=playerNameTwo;
                 playerOnePieces.set(playerOnePieces.get() - 1);
                 break;
             case '2':
                 playerColor=playerTwoColor;
                 playerName=playerNameTwo;
-                playerNameNext=playerNameOne;
                 playerTwoPieces.set(playerTwoPieces.get() - 1);
                 break;
         }
@@ -177,75 +242,10 @@ public class GameController {
             log.info("{} has formed a mill",playerName);
             millFormedLabel.setVisible(true);
             millFormed=true;
-        }else{
-            playerTurnLabel.setText(playerNameNext + "'s turn");
-        }
-        if (!millFormed) {
-            turn.set(turn.get() + 1);
         }
 
 
-    }
-
-    public void dragStarted(MouseEvent mouseEvent){
-
-
-        Shape clicked=(Shape) mouseEvent.getTarget();
-        dragPaint=clicked.getFill();
-        Dragboard db = clicked.startDragAndDrop(TransferMode.ANY);
-        ClipboardContent cb = new ClipboardContent();
-        cb.putString(dragPaint.toString());
-        ArrayList<String> validMoves= gameState.checkForValidMovement(clicked.getId());
-
-        db.setContent(cb);
-        mouseEvent.consume();
-
 
     }
-
-
-    public void dragEntered(DragEvent event){
-
-        if (event.getDragboard().hasString()){
-            event.acceptTransferModes(TransferMode.ANY);
-        }
-        Shape clicked=(Shape) event.getTarget();
-        previousPaint= clicked.getFill();
-        clicked.setFill(dragPaint);
-        System.out.println(event.getDragboard().getString());
-        System.out.println("Drag entered");
-    }
-    public void dragOver(DragEvent event){
-
-        if (event.getDragboard().hasString()){
-            event.acceptTransferModes(TransferMode.ANY);
-        }
-
-
-    }
-
-    public void dragDropped(DragEvent event){
-
-        Shape clicked=(Shape) event.getTarget();
-        previousPaint=dragPaint;
-        clicked.setFill(dragPaint);
-        System.out.println("drag dropped");
-    }
-
-    public void handleDragDone(DragEvent event){
-        Shape clicked=(Shape) event.getTarget();
-        clicked.setFill(Color.TRANSPARENT);
-    }
-
-    public void dragExited(DragEvent event){
-
-        Shape clicked=(Shape) event.getTarget();
-        clicked.setFill(previousPaint);
-        System.out.println("drag exited");
-    }
-
-
-
-
 
 }
