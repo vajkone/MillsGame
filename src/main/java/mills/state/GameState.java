@@ -71,4 +71,13 @@ public class GameState {
 
     }
 
+    public boolean isMill(String slot,char playerNum,char[][] board){
+
+        int row = Integer.parseInt(slot.substring(1,2));
+        int col = Integer.parseInt(slot.substring(2,3));
+
+        return Mill.millTest(new int[]{row,col},playerNum,board);
+
+    }
+
 }
