@@ -55,11 +55,20 @@ public class GameState {
         return Board[row][col] == '0';
     }
 
+    /**
+     * Checks whether the player is trying to remove one of his/her opponent's pieces from the clicked slot.
+     *
+     * @param slot the id of the clicked slot
+     *
+     * @return {@code true} if the clicked slot has the opponent's piece on it, {@code false} otherwise
+     */
     public boolean isValidRemoval(String slot,char playerNum){
         int row = Integer.parseInt(slot.substring(1,2));
         int col = Integer.parseInt(slot.substring(2,3));
 
-        return Board[row][col] != playerNum;
+        return Board[row][col] != playerNum && Board[row][col] != '0';
+
+
     }
 
 
@@ -78,6 +87,11 @@ public class GameState {
 
     }
 
+    /**
+     * Removes the (other) player's piece from the clicked slot.
+     *
+     * @param slot the id of the clicked slot, which determines the slot's place on the board
+     */
     public void removePieceFromBoard(String slot){
         int row = Integer.parseInt(slot.substring(1,2));
         int col = Integer.parseInt(slot.substring(2,3));

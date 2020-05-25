@@ -21,9 +21,6 @@ public class GameController {
     @Inject
     private FXMLLoader fxmlLoader;
 
-    @FXML
-    private Label testLabel;
-
     private IntegerProperty turn = new SimpleIntegerProperty();
     private IntegerProperty playerOnePieces = new SimpleIntegerProperty();
     private IntegerProperty playerTwoPieces = new SimpleIntegerProperty();
@@ -40,8 +37,6 @@ public class GameController {
     private Paint playerOneColor=Color.BLACK;
     private Paint playerTwoColor=Color.DEEPSKYBLUE;
     private GameState gameState;
-    private int playerTurn;
-    private Mill mill;
     private boolean millFormed=false;
 
     @FXML
