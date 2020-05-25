@@ -107,52 +107,14 @@ public class GameController {
 
             if (gameState.isValidPlacement(clicked.getId())) {
 
-                if (actingPlayer=='1') {
+                updateBoardOnPlacement(clicked,actingPlayer);
 
-                    clicked.setFill(playerOneColor);
-                    playerOnePieces.set(playerOnePieces.get() - 1);
-                    gameState.placePieceOnBoard(clicked.getId(), '1');
-                    log.info("{} has placed a piece on the {} place", playerNameOne, clicked.getId());
-                    if (gameState.isMill(clicked.getId(),'1',gameState.getBoard())){
-                        millFormedLabel.setText(playerNameOne+" has formed a mill. Remove one of the other player's men.");
-                        millFormedLabel.setVisible(true);
-                        millFormed=true;
-                    }else{
-                        playerTurnLabel.setText(playerNameTwo + "'s turn");
-                    }
-
-                } else {
-
-                    clicked.setFill(playerTwoColor);
-                    playerTwoPieces.set(playerTwoPieces.get() - 1);
-                    gameState.placePieceOnBoard(clicked.getId(), '2');
-                    log.info("{} has placed a piece on the {} place", playerNameTwo, clicked.getId());
-                    if (gameState.isMill(clicked.getId(),'2',gameState.getBoard())){
-                        millFormedLabel.setText(playerNameTwo+" has formed a mill. Remove one of the other player's men.");
-                        millFormedLabel.setVisible(true);
-                        millFormed=true;
-                    }else{
-                        playerTurnLabel.setText(playerNameOne + "'s turn");
-                    }
-                }
-                if (!millFormed) {
-                    turn.set(turn.get() + 1);
-                }
             }else if(millFormed){
 
                 if (gameState.isValidRemoval(clicked.getId(),actingPlayer)){
-                    gameState.removePieceFromBoard(clicked.getId());
-                    clicked.setFill(Color.TRANSPARENT);
-                    millFormed=false;
-                    millFormedLabel.setVisible(false);
-                    turn.set(turn.get() + 1);
-                    if (playerOnePieces.get()+playerTwoPieces.get()==0){
-                        phase=2;
-                        phaseText.setText("Phase 2");
-                    }
+                    updateBoardOnRemoval(clicked,actingPlayer);
                 }
             }
-
 
             if (playerOnePieces.get()+playerTwoPieces.get()==0 && !millFormed){
                 phase=2;
@@ -162,8 +124,64 @@ public class GameController {
 
         }
 
+    }
 
+    public void updateBoardOnRemoval(Shape clicked,char actingPlayer){
+        String playerNameNext="";
+        switch (actingPlayer) {
+            case '1':
+                playerNameNext = playerNameTwo;
+                break;
+            case '2':
+                playerNameNext = playerNameOne;
+                break;
+        }
+        gameState.removePieceFromBoard(clicked.getId());
+        clicked.setFill(Color.TRANSPARENT);
+        millFormed=false;
+        millFormedLabel.setVisible(false);
+        turn.set(turn.get() + 1);
+        playerTurnLabel.setText(playerNameNext+"'s turn");
+        if (playerOnePieces.get()+playerTwoPieces.get()==0){
+            phase=2;
+            phaseText.setText("Phase 2");
+        }
+    }
 
+    public void updateBoardOnPlacement(Shape clicked,char actingPlayer){
+        Paint playerColor=null;
+        String playerName="";
+        String playerNameNext="";
+        switch (actingPlayer){
+            case '1':
+                playerColor=playerOneColor;
+                playerName=playerNameOne;
+                playerNameNext=playerNameTwo;
+                playerOnePieces.set(playerOnePieces.get() - 1);
+                break;
+            case '2':
+                playerColor=playerTwoColor;
+                playerName=playerNameTwo;
+                playerNameNext=playerNameOne;
+                playerTwoPieces.set(playerTwoPieces.get() - 1);
+                break;
+        }
+
+        clicked.setFill(playerColor);
+
+        gameState.placePieceOnBoard(clicked.getId(), actingPlayer);
+        log.info("{} has placed a piece on the {} place", playerName, clicked.getId());
+        if (gameState.isMill(clicked.getId(),actingPlayer,gameState.getBoard())){
+            millFormedLabel.setText(playerName+" has formed a mill. Remove one of the other player's men.");
+            log.info("{} has formed a mill",playerName);
+            millFormedLabel.setVisible(true);
+            millFormed=true;
+        }else{
+            playerTurnLabel.setText(playerNameNext + "'s turn");
+        }
+        if (!millFormed) {
+            turn.set(turn.get() + 1);
+        }
 
 
     }
