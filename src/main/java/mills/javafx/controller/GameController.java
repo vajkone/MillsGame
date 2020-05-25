@@ -4,8 +4,10 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
@@ -14,6 +16,8 @@ import mills.state.GameState;
 import mills.state.Mill;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class GameController {
@@ -24,7 +28,6 @@ public class GameController {
     private IntegerProperty turn = new SimpleIntegerProperty();
     private IntegerProperty playerOnePieces = new SimpleIntegerProperty();
     private IntegerProperty playerTwoPieces = new SimpleIntegerProperty();
-
 
     @FXML
     private Label phaseText;
@@ -46,6 +49,8 @@ public class GameController {
     private Label playerOnePiecesLabel;
     @FXML
     private Label playerTwoPiecesLabel;
+    @FXML
+    private Pane mainPane;
 
     @FXML
     private Label playerNameTwoLabel;
@@ -66,6 +71,7 @@ public class GameController {
         playerNameOneLabel.setText(playerName1);
         playerNameTwoLabel.setText(playerName2);
         playerTurnLabel.setText(playerNameOne+"'s turn");
+
     }
 
 
@@ -189,11 +195,11 @@ public class GameController {
         Dragboard db = clicked.startDragAndDrop(TransferMode.ANY);
         ClipboardContent cb = new ClipboardContent();
         cb.putString(dragPaint.toString());
+        ArrayList<String> validMoves= gameState.checkForValidMovement(clicked.getId());
 
         db.setContent(cb);
         mouseEvent.consume();
 
-        System.out.println("Drag started");
 
     }
 
