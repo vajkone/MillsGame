@@ -1,26 +1,20 @@
 package mills.javafx.controller;
 
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
-import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import mills.state.GameState;
-import mills.state.Mill;
-
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.List;
+
 
 @Slf4j
 public class GameController {
