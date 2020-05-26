@@ -2,18 +2,25 @@ package mills.javafx.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import mills.results.GameResult;
 import mills.results.GameResultDao;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +35,8 @@ public class ResultsController {
 
     @Inject
     private GameResultDao gameResultDao;
+    @FXML
+    private Button homeScreenButton;
 
     @FXML
     private TableView<GameResult> resultsTable;
@@ -98,4 +107,15 @@ public class ResultsController {
 
         resultsTable.setItems(observableResult);
     }
+
+    public void goToHomeScreen(ActionEvent actionEvent) throws IOException {
+        fxmlLoader.setLocation(getClass().getResource("/fxml/launch.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+
 }

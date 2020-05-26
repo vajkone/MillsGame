@@ -1,11 +1,8 @@
 package mills.state;
 
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.awt.*;
+import lombok.Getter;
 import java.util.ArrayList;
 
 /**

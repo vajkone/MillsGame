@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <Pane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mills.javafx.controller.ResultsController">
    <children>
@@ -15,5 +16,14 @@
             <TableColumn fx:id="finished" prefWidth="197.0" text="Date" />
         </columns>
       </TableView>
+      <HBox layoutY="540.0" prefHeight="61.0" prefWidth="900.0">
+         <children>
+            <Button fx:id="homeScreenButton" mnemonicParsing="false" onAction="#goToHomeScreen" prefHeight="58.0" prefWidth="118.0" text="Back to home screen" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
    </children>
 </Pane>

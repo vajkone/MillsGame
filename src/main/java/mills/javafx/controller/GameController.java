@@ -407,7 +407,6 @@ public class GameController {
                 .winner(winner)
                 .moves(turn.get()-18)
                 .duration(Duration.between(startTime, Instant.now()))
-
                 .build();
         return gr;
     }
