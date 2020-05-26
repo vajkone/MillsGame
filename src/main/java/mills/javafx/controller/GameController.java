@@ -91,8 +91,8 @@ public class GameController {
         phaseText.setText("Phase 1");
 
         turn.set(1);
-        playerOnePieces.set(9);
-        playerTwoPieces.set(9);
+        playerOnePieces.set(4);
+        playerTwoPieces.set(4);
         playerOnePiecesLabel.textProperty().bind(playerOnePieces.asString());
         playerTwoPiecesLabel.textProperty().bind(playerTwoPieces.asString());
         gameState=new GameState();
@@ -140,6 +140,8 @@ public class GameController {
                 phaseTwoStartedLabel.setText("Phase 2 has started. Click on one of your men you wish to move, then select one of the slots marked with a green circle to move your man there");
                 phaseTwoStartedLabel.setVisible(true);
                 validMoves=new ArrayList<>();
+                playerOnePieces.set(gameState.countPlayerPieces('1'));
+                playerTwoPieces.set(gameState.countPlayerPieces('2'));
             }
 
 
@@ -170,7 +172,7 @@ public class GameController {
                 }
 
 
-            }else if (validMoves.contains(clicked.getId().substring(1,3)) && !millFormed){
+            }else if (validMoves.contains(clicked.getId().substring(1,3)) && !millFormed && previousShape!=null){
                 updateBoardOnRemoval(previousShape,actingPlayer);
                 updateBoardOnPlacement(clicked,actingPlayer);
                 if (!millFormed) {
@@ -178,11 +180,15 @@ public class GameController {
                     updatePlayerTurnLabel(actingPlayer);
                 }
                 hasClicked=false;
+                previousShape=null;
                 for (String moves : validMoves) {
                     String shapeId = "c" + moves;
                     Shape movable = (Shape) mainPane.lookup("#" + shapeId);
                     movable.setStroke(Color.BLACK);
                     movable.setStrokeWidth(1);
+                }
+                if (phaseTwoStartedLabel.isVisible()){
+                    phaseTwoStartedLabel.setVisible(false);
                 }
             }else if(millFormed) {
                 if (gameState.isValidRemoval(clicked.getId(), actingPlayer)) {
@@ -192,9 +198,7 @@ public class GameController {
                 }
             }
 
-            if (phaseTwoStartedLabel.isVisible()){
-                phaseTwoStartedLabel.setVisible(false);
-            }
+
 
 
         }
@@ -225,6 +229,13 @@ public class GameController {
 
         gameState.removePieceFromBoard(clicked.getId());
         clicked.setFill(Color.TRANSPARENT);
+        if (phase==2 && millFormed){
+            if (actingPlayer == '1') {
+                playerTwoPieces.set(playerTwoPieces.get() - 1);
+            } else {
+                playerOnePieces.set(playerOnePieces.get() - 1);
+            }
+        }
         millFormed=false;
         millFormedLabel.setVisible(false);
         if (playerOnePieces.get()+playerTwoPieces.get()==0){
@@ -240,19 +251,27 @@ public class GameController {
             case '1':
                 playerColor=playerOneColor;
                 playerName=playerNameOne;
-                playerOnePieces.set(playerOnePieces.get() - 1);
+                if (phase==1) {
+                    playerOnePieces.set(playerOnePieces.get() - 1);
+                }
                 break;
             case '2':
                 playerColor=playerTwoColor;
                 playerName=playerNameTwo;
-                playerTwoPieces.set(playerTwoPieces.get() - 1);
+                if (phase==1) {
+                    playerTwoPieces.set(playerTwoPieces.get() - 1);
+                }
                 break;
         }
 
         clicked.setFill(playerColor);
 
         gameState.placePieceOnBoard(clicked.getId(), actingPlayer);
-        log.info("{} has placed a piece on the {} place", playerName, clicked.getId());
+        if (phase==1) {
+            log.info("{} has placed a piece on the {} place", playerName, clicked.getId());
+        }else{
+            log.info("{} has moved a piece from {} to the {} place", playerName,previousShape.getId(), clicked.getId());
+        }
         if (gameState.isMill(clicked.getId(),actingPlayer,gameState.getBoard())){
             millFormedLabel.setText(playerName+" has formed a mill. Remove one of the other player's men.");
             log.info("{} has formed a mill",playerName);

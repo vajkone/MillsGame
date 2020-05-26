@@ -215,6 +215,18 @@ public class GameState {
 
     }
 
+    public int countPlayerPieces(char playerNum){
+        int count=0;
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                if (Board[i][j]==playerNum){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
     public boolean isMill(String slot,char playerNum,char[][] board){
 
         int row = Integer.parseInt(slot.substring(1,2));
