@@ -1,5 +1,8 @@
 package mills.javafx.controller;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
@@ -12,7 +15,11 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import lombok.extern.slf4j.Slf4j;
 import mills.state.GameState;
+import org.apache.commons.lang3.time.DurationFormatUtils;
+
 import javax.inject.Inject;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 
@@ -51,12 +58,19 @@ public class GameController {
     @FXML
     private Label playerNameOneLabel;
 
+    private Timeline stopWatchTimeline;
+    @FXML
+    private Label stopWatchLabel;
+    private Instant startTime;
+
     @FXML
     private Label playerOnePiecesLabel;
     @FXML
     private Label playerTwoPiecesLabel;
     @FXML
     private Pane mainPane;
+
+    private boolean stopwatchStarted=false;
 
     @FXML
     private Label playerNameTwoLabel;
@@ -96,11 +110,19 @@ public class GameController {
         removablePieces=new ArrayList<>();
 
 
+
+
     }
 
 
 
     public void slotClicked(MouseEvent mouseEvent) {
+
+        if (!stopwatchStarted){
+            startTime = Instant.now();
+            createStopWatch();
+            stopwatchStarted=true;
+        }
 
         char actingPlayer = ' ';
         switch (turn.get() % 2) {
@@ -211,16 +233,20 @@ public class GameController {
         if (playerOnePieces.get()==2) {
             phase=4;
             phaseText.setText("Game ended");
+            log.info("Game ended, {} has won the game.",playerNameTwo);
             phaseTwoStartedLabel.setText(playerNameOne + " has only 2 pieces left, therefore " + playerNameTwo + " has won the game. Congratulations.");
             phaseTwoStartedLabel.setVisible(true);
             playerTurnLabel.setVisible(false);
+            stopWatchTimeline.stop();
 
         }else if(playerTwoPieces.get() == 2){
             phase=4;
             phaseText.setText("Game ended");
+            log.info("Game ended, {} has won the game.",playerNameOne);
             phaseTwoStartedLabel.setText(playerNameTwo + " has only 2 pieces left, therefore " + playerNameOne + " has won the game. Congratulations.");
             phaseTwoStartedLabel.setVisible(true);
             playerTurnLabel.setVisible(false);
+            stopWatchTimeline.stop();
         }
     }
 
@@ -341,6 +367,15 @@ public class GameController {
 
 
 
+    }
+
+    private void createStopWatch() {
+        stopWatchTimeline = new Timeline(new KeyFrame(javafx.util.Duration.ZERO, e -> {
+            long millisElapsed = startTime.until(Instant.now(), ChronoUnit.MILLIS);
+            stopWatchLabel.setText(DurationFormatUtils.formatDuration(millisElapsed, "HH:mm:ss"));
+        }), new KeyFrame(javafx.util.Duration.seconds(1)));
+        stopWatchTimeline.setCycleCount(Animation.INDEFINITE);
+        stopWatchTimeline.play();
     }
 
 }
