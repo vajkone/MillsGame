@@ -36,6 +36,10 @@ public class GameController {
     private Label phaseText;
 
     @FXML
+    private Label  phaseTwoStartedLabel;
+
+
+    @FXML
     private Label millFormedLabel;
 
     private String playerNameOne, playerNameTwo;
@@ -68,14 +72,14 @@ public class GameController {
 
 
     private int phase;
-    private Paint dragPaint;
-    private Paint previousPaint;
+
 
     public void setPlayerNames(String playerName1, String playerName2) {
         this.playerNameTwo = playerName2;
         this.playerNameOne=playerName1;
         playerNameOneLabel.setText(playerName1);
         playerNameTwoLabel.setText(playerName2);
+        playerNameTwoLabel.setTextFill(playerTwoColor);
         playerTurnLabel.setText(playerNameOne+"'s turn");
 
     }
@@ -133,12 +137,16 @@ public class GameController {
             if (playerOnePieces.get() + playerTwoPieces.get() == 0 && !millFormed) {
                 phase = 2;
                 phaseText.setText("Phase 2");
+                phaseTwoStartedLabel.setText("Phase 2 has started. Click on one of your men you wish to move, then select one of the slots marked with a green circle to move your man there");
+                phaseTwoStartedLabel.setVisible(true);
+                validMoves=new ArrayList<>();
             }
 
 
         }
         else if (phase == 2){
             Shape clicked = (Shape) mouseEvent.getTarget();
+
             if (actingPlayer==gameState.getPlayerOfPiece(clicked.getId()) &&!millFormed) {
 
 
@@ -184,6 +192,10 @@ public class GameController {
                 }
             }
 
+            if (phaseTwoStartedLabel.isVisible()){
+                phaseTwoStartedLabel.setVisible(false);
+            }
+
 
         }
 
@@ -193,16 +205,20 @@ public class GameController {
 
     public void updatePlayerTurnLabel(char actingPlayer){
         String playerNameNext="";
+        Paint playerColorNext=null;
         switch (actingPlayer) {
             case '1':
                 playerNameNext = playerNameTwo;
+                playerColorNext = playerTwoColor;
                 break;
             case '2':
                 playerNameNext = playerNameOne;
+                playerColorNext = playerOneColor;
                 break;
         }
 
         playerTurnLabel.setText(playerNameNext+"'s turn");
+        playerTurnLabel.setTextFill(playerColorNext);
     }
 
     public void updateBoardOnRemoval(Shape clicked,char actingPlayer){

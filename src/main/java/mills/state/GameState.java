@@ -200,6 +200,13 @@ public class GameState {
 
     }
 
+    /**
+     * Gets the player's corresponding number of the clicked slot
+     *
+     * @param slot the id of the clicked slot.
+     *
+     * @return the {@code char} representation of the player's number whose man is on the clicked slot, the {@code char} '0' if the slot is empty
+     */
     public char getPlayerOfPiece(String slot){
         int row = Integer.parseInt(slot.substring(1,2));
         int col = Integer.parseInt(slot.substring(2,3));
