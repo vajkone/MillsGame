@@ -120,5 +120,10 @@
          <Font size="18.0" />
       </font>
    </Label>
+   <Button fx:id="resultsButton" alignment="CENTER" layoutX="771.0" layoutY="531.0" mnemonicParsing="false" onAction="#goToResults" prefHeight="46.0" prefWidth="106.0" text="See results" textAlignment="CENTER" visible="false">
+      <font>
+         <Font name="System Bold" size="16.0" />
+      </font>
+   </Button>
 
 </Pane>

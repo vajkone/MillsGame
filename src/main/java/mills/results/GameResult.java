@@ -33,25 +33,36 @@ public class GameResult {
     private String player2;
 
     /**
-     * The number of the combined moves the two players made
+     * The name of the winner of the game
+     */
+    @Column(nullable = false)
+    private String winner;
+
+    /**
+     * The combined number of the moves the two players made
      */
     private int moves;
 
+
+
     /**
      * The duration of the game.
-     */
+    */
     @Column(nullable = false)
     private Duration duration;
 
     /**
      * The timestamp when the result was saved.
-     */
+    */
     @Column(nullable = false)
-    private ZonedDateTime created;
+    private ZonedDateTime finished;
 
     @PrePersist
     protected void onPersist() {
-        created = ZonedDateTime.now();
+        finished = ZonedDateTime.now();
     }
+
+
+
 
 }

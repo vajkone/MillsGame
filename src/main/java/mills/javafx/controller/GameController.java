@@ -7,18 +7,29 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
+import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
+import mills.results.GameResult;
+import mills.results.GameResultDao;
 import mills.state.GameState;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import javax.inject.Inject;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.time.Duration;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
@@ -28,6 +39,8 @@ public class GameController {
 
     @Inject
     private FXMLLoader fxmlLoader;
+    @Inject
+    private GameResultDao gameResultDao;
 
     private IntegerProperty turn = new SimpleIntegerProperty();
     private IntegerProperty playerOnePieces = new SimpleIntegerProperty();
@@ -54,6 +67,7 @@ public class GameController {
     private boolean hasClicked=false;
     private Shape previousShape;
     private ArrayList<Character> flyingPlayers;
+    private String winner;
 
     @FXML
     private Label playerNameOneLabel;
@@ -76,6 +90,8 @@ public class GameController {
     private Label playerNameTwoLabel;
     @FXML
     private Label playerTurnLabel;
+    @FXML
+    private Button resultsButton;
 
 
 
@@ -101,8 +117,8 @@ public class GameController {
         phaseText.setText("Phase 1");
 
         turn.set(1);
-        playerOnePieces.set(9);
-        playerTwoPieces.set(9);
+        playerOnePieces.set(5);
+        playerTwoPieces.set(5);
         playerOnePiecesLabel.textProperty().bind(playerOnePieces.asString());
         playerTwoPiecesLabel.textProperty().bind(playerTwoPieces.asString());
         gameState=new GameState();
@@ -234,19 +250,25 @@ public class GameController {
             phase=4;
             phaseText.setText("Game ended");
             log.info("Game ended, {} has won the game.",playerNameTwo);
+            winner=playerNameTwo;
             phaseTwoStartedLabel.setText(playerNameOne + " has only 2 pieces left, therefore " + playerNameTwo + " has won the game. Congratulations.");
             phaseTwoStartedLabel.setVisible(true);
             playerTurnLabel.setVisible(false);
             stopWatchTimeline.stop();
+            gameResultDao.persist(createGameResult());
+            resultsButton.setVisible(true);
 
         }else if(playerTwoPieces.get() == 2){
             phase=4;
             phaseText.setText("Game ended");
             log.info("Game ended, {} has won the game.",playerNameOne);
+            winner=playerNameOne;
             phaseTwoStartedLabel.setText(playerNameTwo + " has only 2 pieces left, therefore " + playerNameOne + " has won the game. Congratulations.");
             phaseTwoStartedLabel.setVisible(true);
             playerTurnLabel.setVisible(false);
             stopWatchTimeline.stop();
+            gameResultDao.persist(createGameResult());
+            resultsButton.setVisible(true);
         }
     }
 
@@ -378,4 +400,23 @@ public class GameController {
         stopWatchTimeline.play();
     }
 
+    public GameResult createGameResult() {
+        GameResult gr = GameResult.builder()
+                .player1(playerNameOne)
+                .player2(playerNameTwo)
+                .winner(winner)
+                .moves(turn.get()-18)
+                .duration(Duration.between(startTime, Instant.now()))
+
+                .build();
+        return gr;
+    }
+
+    public void goToResults(javafx.event.ActionEvent actionEvent) throws IOException {
+        fxmlLoader.setLocation(getClass().getResource("/fxml/results.fxml"));
+        Parent root = fxmlLoader.load();
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 }
