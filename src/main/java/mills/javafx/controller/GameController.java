@@ -49,8 +49,10 @@ public class GameController {
     private GameState gameState;
     private boolean millFormed=false;
     private ArrayList<String> validMoves;
+    private ArrayList<String> removablePieces;
     private boolean hasClicked=false;
     private Shape previousShape;
+    private ArrayList<Character> flyingPlayers;
 
     @FXML
     private Label playerNameOneLabel;
@@ -91,11 +93,13 @@ public class GameController {
         phaseText.setText("Phase 1");
 
         turn.set(1);
-        playerOnePieces.set(4);
-        playerTwoPieces.set(4);
+        playerOnePieces.set(9);
+        playerTwoPieces.set(9);
         playerOnePiecesLabel.textProperty().bind(playerOnePieces.asString());
         playerTwoPiecesLabel.textProperty().bind(playerTwoPieces.asString());
         gameState=new GameState();
+        flyingPlayers=new ArrayList<>();
+        removablePieces=new ArrayList<>();
 
 
     }
@@ -146,7 +150,7 @@ public class GameController {
 
 
         }
-        else if (phase == 2){
+        else if (phase >= 2 && phase<4){
             Shape clicked = (Shape) mouseEvent.getTarget();
 
             if (actingPlayer==gameState.getPlayerOfPiece(clicked.getId()) &&!millFormed) {
@@ -163,7 +167,11 @@ public class GameController {
 
                 hasClicked = true;
                 previousShape = clicked;
-                validMoves = gameState.checkForValidMovement(clicked.getId());
+                if (phase==3 && flyingPlayers.contains(actingPlayer)){
+                    validMoves=gameState.getVacantPoints();
+                }else {
+                    validMoves = gameState.checkForValidMovement(clicked.getId());
+                }
                 for (String moves : validMoves) {
                     String shapeId = "c" + moves;
                     Shape movable = (Shape) mainPane.lookup("#" + shapeId);
@@ -198,13 +206,51 @@ public class GameController {
                 }
             }
 
+            checkForPhaseThree();
 
+            checkForGameEnd();
 
+        }
+    }
+
+    private void checkForGameEnd() {
+        if (playerOnePieces.get()==2) {
+            phase=4;
+            phaseText.setText("Game ended");
+            phaseTwoStartedLabel.setText(playerNameOne + " has only 2 pieces left, therefore " + playerNameTwo + " has won the game. Congratulations.");
+            phaseTwoStartedLabel.setVisible(true);
+            playerTurnLabel.setVisible(false);
+
+        }else if(playerTwoPieces.get() == 2){
+            phase=4;
+            phaseText.setText("Game ended");
+            phaseTwoStartedLabel.setText(playerNameTwo + " has only 2 pieces left, therefore " + playerNameOne + " has won the game. Congratulations.");
+            phaseTwoStartedLabel.setVisible(true);
+            playerTurnLabel.setVisible(false);
+        }
+    }
+
+    private void checkForPhaseThree() {
+        if (playerOnePieces.get()==3) {
+            if (!flyingPlayers.contains('1')) {
+                phase = 3;
+                phaseText.setText("Phase 3");
+                phaseTwoStartedLabel.setText(playerNameOne + " has only 3 pieces left. " + playerNameOne + ", you may now start flying your pieces.");
+                phaseTwoStartedLabel.setVisible(true);
+                flyingPlayers.add('1');
+            }
 
         }
 
-
-
+        if(playerTwoPieces.get() == 3){
+            if (!flyingPlayers.contains('2')) {
+                phase = 3;
+                phaseText.setText("Phase 3");
+                phaseTwoStartedLabel.setText(playerNameTwo + " has only 3 pieces left. " + playerNameTwo + ", you may now start flying your pieces.");
+                phaseTwoStartedLabel.setVisible(true);
+                flyingPlayers.add('2');
+            }
+        }
     }
 
     public void updatePlayerTurnLabel(char actingPlayer){
@@ -229,11 +275,24 @@ public class GameController {
 
         gameState.removePieceFromBoard(clicked.getId());
         clicked.setFill(Color.TRANSPARENT);
-        if (phase==2 && millFormed){
+        if (phase>=2 && millFormed){
             if (actingPlayer == '1') {
                 playerTwoPieces.set(playerTwoPieces.get() - 1);
             } else {
                 playerOnePieces.set(playerOnePieces.get() - 1);
+            }
+            for (String pieces: removablePieces) {
+                String shapeId = "c" + pieces;
+                Shape movable = (Shape) mainPane.lookup("#" + shapeId);
+                movable.setStroke(Color.BLACK);
+                movable.setStrokeWidth(1);
+            }
+        }else if (phase==1){
+            for (String pieces: removablePieces) {
+                String shapeId = "c" + pieces;
+                Shape movable = (Shape) mainPane.lookup("#" + shapeId);
+                movable.setStroke(Color.BLACK);
+                movable.setStrokeWidth(1);
             }
         }
         millFormed=false;
@@ -277,6 +336,13 @@ public class GameController {
             log.info("{} has formed a mill",playerName);
             millFormedLabel.setVisible(true);
             millFormed=true;
+            removablePieces=gameState.getRemovables(actingPlayer);
+            for (String pieces: removablePieces) {
+                String shapeId = "c" + pieces;
+                Shape movable = (Shape) mainPane.lookup("#" + shapeId);
+                movable.setStroke(Color.RED);
+                movable.setStrokeWidth(3);
+            }
         }
 
 

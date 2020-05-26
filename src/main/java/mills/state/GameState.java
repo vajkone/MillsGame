@@ -59,17 +59,58 @@ public class GameState {
     }
 
     /**
-     * Checks whether the player is trying to remove one of his/her opponent's pieces from the clicked slot.
+     * Checks whether the player is trying to remove a valid piece from the board
      *
-     * @param slot the id of the clicked slot
+     * @param slot the id of the clicked slot, where the player wants to remove a piece from
+     * @param playerNum the {@code char} representation of the currently acting player's number
      *
-     * @return {@code true} if the clicked slot has the opponent's piece on it, {@code false} otherwise
+     * @return {@code true} if the opponent's piece can be legally removed from the clicked slot, {@code false} otherwise
      */
     public boolean isValidRemoval(String slot,char playerNum){
-        int row = Integer.parseInt(slot.substring(1,2));
-        int col = Integer.parseInt(slot.substring(2,3));
 
-        return Board[row][col] != playerNum && Board[row][col] != '0';
+        String slotPruned=slot.substring(1,3);
+
+        return getRemovables(playerNum).contains(slotPruned);
+
+
+
+    }
+    /**
+     * Collects all of the opponents legally removable piece from the board
+     *
+     *
+     * @param actingPlayer the {@code char} representation of the currently acting player's number
+     *
+     * @return the {@code List} of the opponent's legally removable pieces
+     */
+
+    public ArrayList<String> getRemovables(char actingPlayer){
+        ArrayList<String> removables = new ArrayList<>();
+        char otherPlayer;
+        if (actingPlayer=='1'){
+            otherPlayer='2';
+        }else{
+            otherPlayer='1';
+        }
+
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                if (Board[i][j]==otherPlayer && !Mill.millTest(new int[]{i,j},otherPlayer,Board)){
+                    removables.add(String.valueOf(i)+j);
+                }
+            }
+        }
+
+        if (removables.isEmpty()) {
+            for (int i = 0; i < 7; i++) {
+                for (int j = 0; j < 7; j++) {
+                    if (Board[i][j] == otherPlayer) {
+                        removables.add(String.valueOf(i) + j);
+                    }
+                }
+            }
+        }
+        return removables;
 
 
     }
@@ -229,6 +270,7 @@ public class GameState {
 
     public boolean isMill(String slot,char playerNum,char[][] board){
 
+
         int row = Integer.parseInt(slot.substring(1,2));
         int col = Integer.parseInt(slot.substring(2,3));
 
@@ -236,4 +278,20 @@ public class GameState {
 
     }
 
+    public ArrayList<String> getVacantPoints() {
+
+        ArrayList<String> vacantPoints=new ArrayList<>();
+
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                if (Board[i][j]=='0'){
+                    vacantPoints.add(String.valueOf(i)+j);
+                }
+            }
+        }
+
+
+        return vacantPoints;
+
+    }
 }
