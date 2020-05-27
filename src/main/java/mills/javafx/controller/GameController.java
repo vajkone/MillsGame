@@ -59,6 +59,7 @@ public class GameController {
     @FXML
     private Button giveUpButton;
 
+
     private String playerNameOne, playerNameTwo;
 
     private Paint playerOneColor=Color.BLACK;
@@ -97,6 +98,8 @@ public class GameController {
     private Label playerTurnLabel;
     @FXML
     private Button resultsButton;
+    @FXML
+    private Button offerDrawButton;
 
 
 
@@ -122,8 +125,8 @@ public class GameController {
         phaseText.setText("Phase 1");
 
         turn.set(1);
-        playerOnePieces.set(9);
-        playerTwoPieces.set(9);
+        playerOnePieces.set(5);
+        playerTwoPieces.set(5);
         playerOnePiecesLabel.textProperty().bind(playerOnePieces.asString());
         playerTwoPiecesLabel.textProperty().bind(playerTwoPieces.asString());
         gameState=new GameState();
@@ -233,6 +236,10 @@ public class GameController {
 
             checkForGameEnd();
 
+            if (phase>1 && playerTwoPieces.get()==3 && playerOnePieces.get()==3){
+                offerDrawButton.setVisible(true);
+            }
+
         }
     }
 
@@ -263,11 +270,20 @@ public class GameController {
             case '2':
                 winner=playerNameTwo;
                 loser=playerNameOne;
+                break;
+            case ' ':
+                winner="";
+                loser="";
+                break;
 
         }
         phase=4;
         phaseText.setText("Game ended");
-        log.info("Game ended, {} has won the game.", winner);
+        if (winner.isEmpty()){
+            log.info("Game ended with a draw");
+        }else{
+            log.info("Game ended, {} has won the game.", winner);
+        }
         if (!forfeit) {
             tipsLabel.setText(loser + " has only 2 pieces left, therefore " + winner + " has won the game. Congratulations.");
             tipsLabel.setVisible(true);
@@ -433,7 +449,7 @@ public class GameController {
 
     public void handleGiveUp(ActionEvent actionEvent) throws IOException{
         String buttonText = ((Button) actionEvent.getSource()).getText();
-        log.debug("{} is pressed", buttonText);
+        log.debug("{} button pressed", buttonText);
         String actingPlayer;
         char winner;
         if (turn.get()%2==1){
@@ -452,5 +468,34 @@ public class GameController {
             forfeit=true;
             updateOnGameEnd(winner);
         }
+    }
+
+    public void offerDraw(ActionEvent actionEvent){
+        String buttonText = ((Button) actionEvent.getSource()).getText();
+        log.debug("{} button pressed", buttonText);
+        String actingPlayer;
+        String otherPlayer;
+        if (turn.get()%2==1){
+            actingPlayer=playerNameOne;
+            otherPlayer=playerNameTwo;
+
+        }else{
+            actingPlayer=playerNameTwo;
+            otherPlayer=playerNameOne;
+
+        }
+        log.info("{} has offered a draw",actingPlayer);
+        log.debug("Showing alert dialog");
+
+        Alert alert =new Alert(Alert.AlertType.NONE, actingPlayer+"has offered a draw. "+otherPlayer+", do you accept?", ButtonType.YES,ButtonType.NO);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.YES) {
+            forfeit=true;
+            log.info("{} has accepted the draw",otherPlayer);
+            updateOnGameEnd(' ');
+        }else{
+            log.info("{} didn't accept the draw",otherPlayer);
+        }
+
     }
 }

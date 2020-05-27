@@ -35,7 +35,7 @@ public class GameResult {
     /**
      * The name of the winner of the game
      */
-    @Column(nullable = false)
+
     private String winner;
 
     /**

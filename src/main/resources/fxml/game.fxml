@@ -125,7 +125,7 @@
          <Font name="System Bold" size="16.0" />
       </font>
    </Button>
-   <Button alignment="CENTER" layoutX="749.0" layoutY="323.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="130.0" text="Offer Draw">
+   <Button fx:id="offerDrawButton" alignment="CENTER" layoutX="749.0" layoutY="323.0" mnemonicParsing="false" onAction="#offerDraw" prefHeight="75.0" prefWidth="130.0" text="Offer Draw" visible="false">
       <font>
          <Font name="System Bold" size="16.0" />
       </font>
