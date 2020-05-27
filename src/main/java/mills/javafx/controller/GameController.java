@@ -68,6 +68,7 @@ public class GameController {
     private Shape previousShape;
     private ArrayList<Character> flyingPlayers;
     private String winner;
+    private String loser;
 
     @FXML
     private Label playerNameOneLabel;
@@ -117,8 +118,8 @@ public class GameController {
         phaseText.setText("Phase 1");
 
         turn.set(1);
-        playerOnePieces.set(5);
-        playerTwoPieces.set(5);
+        playerOnePieces.set(9);
+        playerTwoPieces.set(9);
         playerOnePiecesLabel.textProperty().bind(playerOnePieces.asString());
         playerTwoPiecesLabel.textProperty().bind(playerTwoPieces.asString());
         gameState=new GameState();
@@ -151,7 +152,7 @@ public class GameController {
         }
         if (phase == 1) {
             Shape clicked = (Shape) mouseEvent.getTarget();
-
+            log.debug("Circle {} clicked",clicked.getId());
 
             if (gameState.isValidPlacement(clicked.getId()) && !millFormed) {
 
@@ -184,17 +185,13 @@ public class GameController {
         }
         else if (phase >= 2 && phase<4){
             Shape clicked = (Shape) mouseEvent.getTarget();
+            log.debug("Circle {} clicked",clicked.getId());
 
             if (actingPlayer==gameState.getPlayerOfPiece(clicked.getId()) &&!millFormed) {
 
 
                 if (hasClicked && clicked!=previousShape) {
-                    for (String moves : validMoves) {
-                        String shapeId = "c" + moves;
-                        Shape movable = (Shape) mainPane.lookup("#" + shapeId);
-                        movable.setStroke(Color.BLACK);
-                        movable.setStrokeWidth(1);
-                    }
+                    updateMovesHighlight(validMoves, Color.BLACK, 1);
                 }
 
                 hasClicked = true;
@@ -204,12 +201,7 @@ public class GameController {
                 }else {
                     validMoves = gameState.checkForValidMovement(clicked.getId());
                 }
-                for (String moves : validMoves) {
-                    String shapeId = "c" + moves;
-                    Shape movable = (Shape) mainPane.lookup("#" + shapeId);
-                    movable.setStroke(Color.GREEN);
-                    movable.setStrokeWidth(3);
-                }
+                updateMovesHighlight(validMoves, Color.GREEN, 3);
 
 
             }else if (validMoves.contains(clicked.getId().substring(1,3)) && !millFormed && previousShape!=null){
@@ -221,12 +213,7 @@ public class GameController {
                 }
                 hasClicked=false;
                 previousShape=null;
-                for (String moves : validMoves) {
-                    String shapeId = "c" + moves;
-                    Shape movable = (Shape) mainPane.lookup("#" + shapeId);
-                    movable.setStroke(Color.BLACK);
-                    movable.setStrokeWidth(1);
-                }
+                updateMovesHighlight(validMoves, Color.BLACK, 1);
                 if (phaseTwoStartedLabel.isVisible()){
                     phaseTwoStartedLabel.setVisible(false);
                 }
@@ -245,37 +232,54 @@ public class GameController {
         }
     }
 
+    private void updateMovesHighlight(ArrayList<String> validMoves, Color black, int i) {
+        for (String moves : validMoves) {
+            String shapeId = "c" + moves;
+            Shape movable = (Shape) mainPane.lookup("#" + shapeId);
+            movable.setStroke(black);
+            movable.setStrokeWidth(i);
+        }
+    }
+
     private void checkForGameEnd() {
         if (playerOnePieces.get()==2) {
-            phase=4;
-            phaseText.setText("Game ended");
-            log.info("Game ended, {} has won the game.",playerNameTwo);
-            winner=playerNameTwo;
-            phaseTwoStartedLabel.setText(playerNameOne + " has only 2 pieces left, therefore " + playerNameTwo + " has won the game. Congratulations.");
-            phaseTwoStartedLabel.setVisible(true);
-            playerTurnLabel.setVisible(false);
-            stopWatchTimeline.stop();
-            gameResultDao.persist(createGameResult());
-            resultsButton.setVisible(true);
+            updateOnGameEnd('2');
 
         }else if(playerTwoPieces.get() == 2){
-            phase=4;
-            phaseText.setText("Game ended");
-            log.info("Game ended, {} has won the game.",playerNameOne);
-            winner=playerNameOne;
-            phaseTwoStartedLabel.setText(playerNameTwo + " has only 2 pieces left, therefore " + playerNameOne + " has won the game. Congratulations.");
-            phaseTwoStartedLabel.setVisible(true);
-            playerTurnLabel.setVisible(false);
-            stopWatchTimeline.stop();
-            gameResultDao.persist(createGameResult());
-            resultsButton.setVisible(true);
+            updateOnGameEnd('1');
         }
+    }
+
+    private void updateOnGameEnd(char winningPlayer) {
+        switch (winningPlayer){
+            case '1':
+                winner=playerNameOne;
+                loser=playerNameTwo;
+                break;
+            case '2':
+                winner=playerNameTwo;
+                loser=playerNameOne;
+
+        }
+        phase=4;
+        phaseText.setText("Game ended");
+        log.info("Game ended, {} has won the game.", winner);
+        phaseTwoStartedLabel.setText(loser + " has only 2 pieces left, therefore " + winner + " has won the game. Congratulations.");
+        phaseTwoStartedLabel.setVisible(true);
+        playerTurnLabel.setVisible(false);
+        stopWatchTimeline.stop();
+        log.debug("Saving result to database...");
+        gameResultDao.persist(createGameResult());
+        resultsButton.setVisible(true);
     }
 
     private void checkForPhaseThree() {
         if (playerOnePieces.get()==3) {
             if (!flyingPlayers.contains('1')) {
-                phase = 3;
+                if (phase==2){
+                    phase = 3;
+                    log.info("Phase 3 started");
+                }
                 phaseText.setText("Phase 3");
                 phaseTwoStartedLabel.setText(playerNameOne + " has only 3 pieces left. " + playerNameOne + ", you may now start flying your pieces.");
                 phaseTwoStartedLabel.setVisible(true);
@@ -286,7 +290,10 @@ public class GameController {
 
         if(playerTwoPieces.get() == 3){
             if (!flyingPlayers.contains('2')) {
-                phase = 3;
+                if (phase==2){
+                    phase = 3;
+                    log.info("Phase 3 started");
+                }
                 phaseText.setText("Phase 3");
                 phaseTwoStartedLabel.setText(playerNameTwo + " has only 3 pieces left. " + playerNameTwo + ", you may now start flying your pieces.");
                 phaseTwoStartedLabel.setVisible(true);
@@ -323,25 +330,25 @@ public class GameController {
             } else {
                 playerOnePieces.set(playerOnePieces.get() - 1);
             }
-            for (String pieces: removablePieces) {
-                String shapeId = "c" + pieces;
-                Shape movable = (Shape) mainPane.lookup("#" + shapeId);
-                movable.setStroke(Color.BLACK);
-                movable.setStrokeWidth(1);
-            }
+            updateRemoveHighlight(removablePieces, Color.BLACK, 1);
         }else if (phase==1){
-            for (String pieces: removablePieces) {
-                String shapeId = "c" + pieces;
-                Shape movable = (Shape) mainPane.lookup("#" + shapeId);
-                movable.setStroke(Color.BLACK);
-                movable.setStrokeWidth(1);
-            }
+            updateRemoveHighlight(removablePieces, Color.BLACK, 1);
         }
         millFormed=false;
         millFormedLabel.setVisible(false);
         if (playerOnePieces.get()+playerTwoPieces.get()==0){
             phase=2;
             phaseText.setText("Phase 2");
+            log.info("Phase 2 started");
+        }
+    }
+
+    private void updateRemoveHighlight(ArrayList<String> removablePieces, Color black, int i) {
+        for (String pieces : removablePieces) {
+            String shapeId = "c" + pieces;
+            Shape movable = (Shape) mainPane.lookup("#" + shapeId);
+            movable.setStroke(black);
+            movable.setStrokeWidth(i);
         }
     }
 
@@ -379,12 +386,7 @@ public class GameController {
             millFormedLabel.setVisible(true);
             millFormed=true;
             removablePieces=gameState.getRemovables(actingPlayer);
-            for (String pieces: removablePieces) {
-                String shapeId = "c" + pieces;
-                Shape movable = (Shape) mainPane.lookup("#" + shapeId);
-                movable.setStroke(Color.RED);
-                movable.setStrokeWidth(3);
-            }
+            updateRemoveHighlight(removablePieces, Color.RED, 3);
         }
 
 
@@ -412,6 +414,9 @@ public class GameController {
     }
 
     public void goToResults(javafx.event.ActionEvent actionEvent) throws IOException {
+        String buttonText = ((Button) actionEvent.getSource()).getText();
+        log.debug("{} is pressed", buttonText);
+        log.info("Loading results scene...");
         fxmlLoader.setLocation(getClass().getResource("/fxml/results.fxml"));
         Parent root = fxmlLoader.load();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
