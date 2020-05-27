@@ -13,7 +13,7 @@ public class GameState {
     /**
      * The array representing the initial configuration of the board.
      */
-    public static final char[][] INITIAL = {
+    public final char[][] INITIAL = {
             {'0', '-', '-', '0', '-', '-','0'},
             {'|', '0', '-', '0', '-', '0','|'},
             {'|', '|', '0', '0', '0', '|','|'},

@@ -109,9 +109,10 @@ public class ResultsController {
     }
 
     public void goToHomeScreen(ActionEvent actionEvent) throws IOException {
+        log.debug("{} is pressed", ((Button) actionEvent.getSource()).getText());
+        log.info("Loading launch scene...");
         fxmlLoader.setLocation(getClass().getResource("/fxml/launch.fxml"));
         Parent root = fxmlLoader.load();
-
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
