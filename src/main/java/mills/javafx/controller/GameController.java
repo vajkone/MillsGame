@@ -5,12 +5,15 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
@@ -25,7 +28,6 @@ import mills.state.GameState;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import javax.inject.Inject;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
@@ -49,12 +51,13 @@ public class GameController {
     @FXML
     private Label phaseText;
 
-    @FXML
-    private Label  phaseTwoStartedLabel;
 
 
     @FXML
-    private Label millFormedLabel;
+    private Label tipsLabel;
+
+    @FXML
+    private Button giveUpButton;
 
     private String playerNameOne, playerNameTwo;
 
@@ -69,6 +72,7 @@ public class GameController {
     private ArrayList<Character> flyingPlayers;
     private String winner;
     private String loser;
+    private boolean forfeit =false;
 
     @FXML
     private Label playerNameOneLabel;
@@ -174,8 +178,8 @@ public class GameController {
             if (playerOnePieces.get() + playerTwoPieces.get() == 0 && !millFormed) {
                 phase = 2;
                 phaseText.setText("Phase 2");
-                phaseTwoStartedLabel.setText("Phase 2 has started. Click on one of your men you wish to move, then select one of the slots marked with a green circle to move your man there");
-                phaseTwoStartedLabel.setVisible(true);
+                tipsLabel.setText("Phase 2 has started. Click on one of your men you wish to move, then select one of the slots marked with a green circle to move your man there");
+                tipsLabel.setVisible(true);
                 validMoves=new ArrayList<>();
                 playerOnePieces.set(gameState.countPlayerPieces('1'));
                 playerTwoPieces.set(gameState.countPlayerPieces('2'));
@@ -214,8 +218,8 @@ public class GameController {
                 hasClicked=false;
                 previousShape=null;
                 updateMovesHighlight(validMoves, Color.BLACK, 1);
-                if (phaseTwoStartedLabel.isVisible()){
-                    phaseTwoStartedLabel.setVisible(false);
+                if (tipsLabel.isVisible()){
+                    tipsLabel.setVisible(false);
                 }
             }else if(millFormed) {
                 if (gameState.isValidRemoval(clicked.getId(), actingPlayer)) {
@@ -264,8 +268,10 @@ public class GameController {
         phase=4;
         phaseText.setText("Game ended");
         log.info("Game ended, {} has won the game.", winner);
-        phaseTwoStartedLabel.setText(loser + " has only 2 pieces left, therefore " + winner + " has won the game. Congratulations.");
-        phaseTwoStartedLabel.setVisible(true);
+        if (!forfeit) {
+            tipsLabel.setText(loser + " has only 2 pieces left, therefore " + winner + " has won the game. Congratulations.");
+            tipsLabel.setVisible(true);
+        }
         playerTurnLabel.setVisible(false);
         stopWatchTimeline.stop();
         log.debug("Saving result to database...");
@@ -281,8 +287,8 @@ public class GameController {
                     log.info("Phase 3 started");
                 }
                 phaseText.setText("Phase 3");
-                phaseTwoStartedLabel.setText(playerNameOne + " has only 3 pieces left. " + playerNameOne + ", you may now start flying your pieces.");
-                phaseTwoStartedLabel.setVisible(true);
+                tipsLabel.setText(playerNameOne + " has only 3 pieces left. " + playerNameOne + ", you may now start flying your pieces.");
+                tipsLabel.setVisible(true);
                 flyingPlayers.add('1');
             }
 
@@ -295,8 +301,8 @@ public class GameController {
                     log.info("Phase 3 started");
                 }
                 phaseText.setText("Phase 3");
-                phaseTwoStartedLabel.setText(playerNameTwo + " has only 3 pieces left. " + playerNameTwo + ", you may now start flying your pieces.");
-                phaseTwoStartedLabel.setVisible(true);
+                tipsLabel.setText(playerNameTwo + " has only 3 pieces left. " + playerNameTwo + ", you may now start flying your pieces.");
+                tipsLabel.setVisible(true);
                 flyingPlayers.add('2');
             }
         }
@@ -335,7 +341,7 @@ public class GameController {
             updateRemoveHighlight(removablePieces, Color.BLACK, 1);
         }
         millFormed=false;
-        millFormedLabel.setVisible(false);
+        tipsLabel.setVisible(false);
         if (playerOnePieces.get()+playerTwoPieces.get()==0){
             phase=2;
             phaseText.setText("Phase 2");
@@ -380,10 +386,11 @@ public class GameController {
         }else{
             log.info("{} has moved a piece from {} to the {} place", playerName,previousShape.getId(), clicked.getId());
         }
+
         if (gameState.isMill(clicked.getId(),actingPlayer,gameState.getBoard())){
-            millFormedLabel.setText(playerName+" has formed a mill. Remove one of the other player's men.");
+            tipsLabel.setText(playerName+" has formed a mill. You can now remove one of the opponent's pieces.");
             log.info("{} has formed a mill",playerName);
-            millFormedLabel.setVisible(true);
+            tipsLabel.setVisible(true);
             millFormed=true;
             removablePieces=gameState.getRemovables(actingPlayer);
             updateRemoveHighlight(removablePieces, Color.RED, 3);
@@ -407,7 +414,7 @@ public class GameController {
                 .player1(playerNameOne)
                 .player2(playerNameTwo)
                 .winner(winner)
-                .moves(turn.get()-18)
+                .moves(turn.get())
                 .duration(Duration.between(startTime, Instant.now()))
                 .build();
         return gr;
@@ -422,5 +429,28 @@ public class GameController {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
+    }
+
+    public void handleGiveUp(ActionEvent actionEvent) throws IOException{
+        String buttonText = ((Button) actionEvent.getSource()).getText();
+        log.debug("{} is pressed", buttonText);
+        String actingPlayer;
+        char winner;
+        if (turn.get()%2==1){
+            actingPlayer=playerNameOne;
+            winner='2';
+        }else{
+            actingPlayer=playerNameTwo;
+            winner='1';
+        }
+        log.info("{} wants to give up the game",actingPlayer);
+        log.debug("Showing alert dialog");
+        Alert alert =new Alert(Alert.AlertType.NONE, actingPlayer+", are you sure you want to give up?", ButtonType.YES,ButtonType.CANCEL);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.YES) {
+            log.info("{} has given up the game",actingPlayer);
+            forfeit=true;
+            updateOnGameEnd(winner);
+        }
     }
 }
