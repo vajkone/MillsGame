@@ -26,12 +26,10 @@ import mills.results.GameResult;
 import mills.results.GameResultDao;
 import mills.state.GameState;
 import org.apache.commons.lang3.time.DurationFormatUtils;
-
 import javax.inject.Inject;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
@@ -51,14 +49,8 @@ public class GameController {
     @FXML
     private Label phaseText;
 
-
-
     @FXML
     private Label tipsLabel;
-
-    @FXML
-    private Button giveUpButton;
-
 
     private String playerNameOne, playerNameTwo;
 
@@ -426,14 +418,13 @@ public class GameController {
     }
 
     public GameResult createGameResult() {
-        GameResult gr = GameResult.builder()
+        return GameResult.builder()
                 .player1(playerNameOne)
                 .player2(playerNameTwo)
                 .winner(winner)
                 .moves(turn.get())
                 .duration(Duration.between(startTime, Instant.now()))
                 .build();
-        return gr;
     }
 
     public void goToResults(javafx.event.ActionEvent actionEvent) throws IOException {
@@ -447,7 +438,7 @@ public class GameController {
         stage.show();
     }
 
-    public void handleGiveUp(ActionEvent actionEvent) throws IOException{
+    public void handleGiveUp(ActionEvent actionEvent){
         String buttonText = ((Button) actionEvent.getSource()).getText();
         log.debug("{} button pressed", buttonText);
         String actingPlayer;
