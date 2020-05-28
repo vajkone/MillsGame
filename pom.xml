@@ -6,7 +6,7 @@
 
     <groupId>hu.unideb.inf</groupId>
     <artifactId>MillsGame</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <description>The Nine Men's Morris (Mills) 2 player board game</description>
     <scm>
         <connection>scm:git:https://github.com/vajkone/MillsGame.git</connection>
