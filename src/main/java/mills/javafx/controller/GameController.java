@@ -104,6 +104,8 @@ public class GameController {
     private Button resultsButton;
     @FXML
     private Button offerDrawButton;
+    @FXML
+    private Button giveUpButton;
 
 
 
@@ -293,6 +295,7 @@ public class GameController {
         }
         phase=4;
         phaseText.setText("Game ended");
+        giveUpButton.setDisable(true);
         if (winner.isEmpty()){
             log.info("Game ended with a draw");
         }else{

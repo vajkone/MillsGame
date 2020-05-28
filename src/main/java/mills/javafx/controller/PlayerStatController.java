@@ -76,19 +76,23 @@ public class PlayerStatController {
     }
 
     public void handleSearchPlayer(ActionEvent actionEvent){
-        if (playerNameTf.getText().isEmpty()){
+        String buttonText = ((Button) actionEvent.getSource()).getText();
+        log.debug("{} is pressed", buttonText);
 
+        if (playerNameTf.getText().isEmpty()){
+                errorLabel.setVisible(true);
         }else{
             String playerNameSearched = playerNameTf.getText();
             int wins= (int) PlayerStatDao.getWins(playerNameSearched);
             if(PlayerStatDao.checkPlayerInDb(playerNameSearched).isEmpty()){
                 errorLabel.setVisible(true);
             }else{
+                log.info("Loading player statistics...");
                 errorLabel.setVisible(false);
                 int gamesplayed=(int)PlayerStatDao.getGamesCount(playerNameSearched);
                 gamesPlayedLabel.setText(String.valueOf(gamesplayed));
                 playerWins.setText(String.valueOf(wins));
-                winPercentLabel.setText(String.format("%.2f",(double) wins/gamesplayed)+"%");
+                winPercentLabel.setText(String.format("%.2f",(double) wins/gamesplayed*100)+"%");
                 drawsLabel.setText(String.valueOf(PlayerStatDao.getDraws(playerNameSearched)));
                 playerNameLabel.setText(playerNameSearched);
                 avgMovesLabel.setText(String.format("%.2f",PlayerStatDao.getMoves(playerNameSearched)));
