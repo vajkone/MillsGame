@@ -29,18 +29,18 @@ public class PlayerStat {
     private String player;
 
     /**
-     * Indicates whether the player has won or not
+     * Indicates whether the player has won or not.
      */
     private boolean win;
 
     /**
-     * The number of moves the player has made
+     * The number of moves the player has made.
      */
     private int moves;
 
 
     /**
-     * Indicates whether the game has ended in a draw or not
+     * Indicates whether the game has ended in a draw or not.
      */
     private boolean draw;
 

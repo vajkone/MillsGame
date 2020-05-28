@@ -15,7 +15,7 @@ public class GameResultDao extends GenericJpaDao<GameResult>{
     }
 
     /**
-     * Returns the list of {@code n} most recent games played
+     * Returns the list of {@code n} most recent games played.
      *
      * @param n the maximum number of results to be returned
      * @return the list of {@code n} most recently played games

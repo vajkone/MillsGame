@@ -18,7 +18,7 @@ public class PlayerStatDao extends GenericJpaDao<PlayerStat> {
     }
 
     /**
-     * Returns the number of winning games the player has achieved
+     * Returns the number of winning games the player has achieved.
      *
      * @param player the name of the player whose statistics we are querying
      * @return the number of winning games of the player
@@ -33,7 +33,7 @@ public class PlayerStatDao extends GenericJpaDao<PlayerStat> {
     }
 
     /**
-     * Returns the number of average moves the player has made per game
+     * Returns the number of average moves the player has made per game.
      *
      * @param player the name of the player whose statistics we are querying
      * @return the number of average moves the player has made per game
@@ -46,7 +46,7 @@ public class PlayerStatDao extends GenericJpaDao<PlayerStat> {
     }
 
     /**
-     * Checks whether the player is in the database or not
+     * Checks whether the player is in the database or not.
      *
      * @param player the name of the player we are looking for
      * @return {@code Optional<PlayerStat>} object if the player is in the database, {@code Optional.empty} otherwise
@@ -62,7 +62,7 @@ public class PlayerStatDao extends GenericJpaDao<PlayerStat> {
     }
 
     /**
-     * Returns the number of total games the player has player
+     * Returns the number of total games the player has player.
      *
      * @param player the name of the player whose statistics we are querying
      * @return the number of games the player has played
@@ -75,7 +75,7 @@ public class PlayerStatDao extends GenericJpaDao<PlayerStat> {
     }
 
     /**
-     * Returns the average duration of the player's games
+     * Returns the average duration of the player's games.
      *
      * @param player the name of the player whose statistics we are querying
      * @return the average duration of the player's games in Millis format
@@ -95,7 +95,7 @@ public class PlayerStatDao extends GenericJpaDao<PlayerStat> {
     }
 
     /**
-     * Returns the number of draw games the player has had
+     * Returns the number of draw games the player has had.
      *
      * @param player the name of the player whose statistics we are querying
      * @return the number of draw games of the player

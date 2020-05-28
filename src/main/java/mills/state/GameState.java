@@ -1,7 +1,4 @@
 package mills.state;
-
-
-
 import lombok.Getter;
 import java.util.ArrayList;
 
@@ -56,7 +53,7 @@ public class GameState {
     }
 
     /**
-     * Checks whether the player is trying to remove a valid piece from the board
+     * Checks whether the player is trying to remove a valid piece from the board.
      *
      * @param slot the id of the clicked slot, where the player wants to remove a piece from
      * @param playerNum the {@code char} representation of the currently acting player's number
@@ -73,7 +70,7 @@ public class GameState {
 
     }
     /**
-     * Collects all of the opponents legally removable piece from the board
+     * Collects all of the opponents legally removable piece from the board.
      *
      *
      * @param actingPlayer the {@code char} representation of the currently acting player's number
@@ -239,7 +236,7 @@ public class GameState {
     }
 
     /**
-     * Gets the player's corresponding number of the clicked slot
+     * Gets the player's corresponding number of the clicked slot.
      *
      * @param slot the id of the clicked slot.
      *
@@ -252,6 +249,14 @@ public class GameState {
         return Board[row][col];
 
     }
+
+    /**
+     * Counts the player's pieces on the board
+     *
+     * @param playerNum the char representation of the player's number, whose pieces we want to count
+     *
+     * @return number of pieces the player has on the board
+     */
 
     public int countPlayerPieces(char playerNum){
         int count=0;
@@ -274,6 +279,12 @@ public class GameState {
         return Mill.millTest(new int[]{row,col},playerNum,board);
 
     }
+
+    /**
+     * Collects all vacant slots on the board
+     *
+     * @return the List of the vacant slots' coordinates in String format
+     */
 
     public ArrayList<String> getVacantPoints() {
 

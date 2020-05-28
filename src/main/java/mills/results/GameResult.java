@@ -33,13 +33,13 @@ public class GameResult {
     private String player2;
 
     /**
-     * The name of the winner of the game
+     * The name of the winner of the game.
      */
 
     private String winner;
 
     /**
-     * The combined number of the moves the two players made
+     * The combined number of the moves the two players made.
      */
     private int moves;
 

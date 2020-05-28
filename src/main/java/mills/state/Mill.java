@@ -33,12 +33,12 @@ public enum Mill {
     }
 
     /**
-     * Return whether the player has formed a mill with his/her most recent move or not
+     * Return whether the slot is forming a mill or not
      *
-     * @param slot the x and y-coordinates of the slot, where the player placed one of his/her pieces
-     * @param playerNum the {@code char} representation of the player that made the move
+     * @param slot the x and y-coordinates of the slot
+     * @param playerNum the {@code char} representation of the player, whose piece is on the slot
      * @param currentBoard array representing the current state of the board
-     * @return {@code true} if the player formed a mill, {@code false} otherwise
+     * @return {@code true} if the player is forming a mill on the given slot, {@code false} otherwise
      */
 
     public static boolean millTest(int[] slot,char playerNum,char[][] currentBoard){

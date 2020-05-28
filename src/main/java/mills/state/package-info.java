@@ -1,4 +1,4 @@
 /**
- * Defines the state of the mills game
+ * Defines the state of the mills game.
  */
 package mills.state;
