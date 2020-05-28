@@ -131,8 +131,8 @@ public class GameController {
         phaseText.setText("Phase 1");
 
         turn.set(1);
-        playerOnePieces.set(5);
-        playerTwoPieces.set(5);
+        playerOnePieces.set(9);
+        playerTwoPieces.set(9);
         playerOneMoves=0;
         playerTwoMoves=0;
         playerOnePiecesLabel.textProperty().bind(playerOnePieces.asString());
@@ -301,8 +301,12 @@ public class GameController {
         }else{
             log.info("Game ended, {} has won the game.", winner);
         }
+
         if (!forfeit && !draw) {
             tipsLabel.setText(loser + " has only 2 pieces left, therefore " + winner + " has won the game. Congratulations.");
+            tipsLabel.setVisible(true);
+        }else if(forfeit){
+            tipsLabel.setText(loser + " gave up. " + winner + " has won the game. Congratulations.");
             tipsLabel.setVisible(true);
         }
         playerTurnLabel.setVisible(false);
