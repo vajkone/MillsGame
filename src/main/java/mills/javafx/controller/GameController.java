@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -21,10 +22,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
+
 import lombok.extern.slf4j.Slf4j;
 import mills.results.GameResult;
 import mills.results.GameResultDao;
 import mills.state.GameState;
+import mills.stats.PlayerStat;
+import mills.stats.PlayerStatDao;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import javax.inject.Inject;
 import java.io.IOException;
@@ -41,6 +45,8 @@ public class GameController {
     private FXMLLoader fxmlLoader;
     @Inject
     private GameResultDao gameResultDao;
+    @Inject
+    private PlayerStatDao playerStatDao;
 
     private IntegerProperty turn = new SimpleIntegerProperty();
     private IntegerProperty playerOnePieces = new SimpleIntegerProperty();
@@ -66,9 +72,14 @@ public class GameController {
     private String winner;
     private String loser;
     private boolean forfeit =false;
+    private boolean draw =false;
+
 
     @FXML
     private Label playerNameOneLabel;
+
+    private int playerOneMoves;
+    private int playerTwoMoves;
 
     private Timeline stopWatchTimeline;
     @FXML
@@ -83,6 +94,7 @@ public class GameController {
     private Pane mainPane;
 
     private boolean stopwatchStarted=false;
+
 
     @FXML
     private Label playerNameTwoLabel;
@@ -119,11 +131,14 @@ public class GameController {
         turn.set(1);
         playerOnePieces.set(5);
         playerTwoPieces.set(5);
+        playerOneMoves=0;
+        playerTwoMoves=0;
         playerOnePiecesLabel.textProperty().bind(playerOnePieces.asString());
         playerTwoPiecesLabel.textProperty().bind(playerTwoPieces.asString());
         gameState=new GameState();
         flyingPlayers=new ArrayList<>();
         removablePieces=new ArrayList<>();
+
 
 
 
@@ -149,6 +164,7 @@ public class GameController {
                 actingPlayer = '1';
                 break;
         }
+
         if (phase == 1) {
             Shape clicked = (Shape) mouseEvent.getTarget();
             log.debug("Circle {} clicked",clicked.getId());
@@ -157,8 +173,10 @@ public class GameController {
 
                 updateBoardOnPlacement(clicked, actingPlayer);
                 if (!millFormed) {
+
                     turn.set(turn.get() + 1);
                     updatePlayerTurnLabel(actingPlayer);
+
                 }
 
             } else if (millFormed) {
@@ -207,6 +225,8 @@ public class GameController {
                 updateBoardOnRemoval(previousShape,actingPlayer);
                 updateBoardOnPlacement(clicked,actingPlayer);
                 if (!millFormed) {
+                    if (actingPlayer == '1') playerOneMoves++;
+                    else playerTwoMoves++;
                     turn.set(turn.get() + 1);
                     updatePlayerTurnLabel(actingPlayer);
                 }
@@ -219,6 +239,8 @@ public class GameController {
             }else if(millFormed) {
                 if (gameState.isValidRemoval(clicked.getId(), actingPlayer)) {
                     updateBoardOnRemoval(clicked, actingPlayer);
+                    if (actingPlayer == '1') playerOneMoves++;
+                    else playerTwoMoves++;
                     turn.set(turn.get() + 1);
                     updatePlayerTurnLabel(actingPlayer);
                 }
@@ -276,7 +298,7 @@ public class GameController {
         }else{
             log.info("Game ended, {} has won the game.", winner);
         }
-        if (!forfeit) {
+        if (!forfeit && !draw) {
             tipsLabel.setText(loser + " has only 2 pieces left, therefore " + winner + " has won the game. Congratulations.");
             tipsLabel.setVisible(true);
         }
@@ -284,6 +306,8 @@ public class GameController {
         stopWatchTimeline.stop();
         log.debug("Saving result to database...");
         gameResultDao.persist(createGameResult());
+        playerStatDao.persist(createPlayerOneStat(playerNameOne));
+        playerStatDao.persist(createPlayerTwoStat(playerNameTwo));
         resultsButton.setVisible(true);
     }
 
@@ -427,6 +451,26 @@ public class GameController {
                 .build();
     }
 
+    public PlayerStat createPlayerOneStat(String player){
+
+        return PlayerStat.builder()
+                .player(player)
+                .win(player.equals(winner))
+                .duration(Duration.between(startTime, Instant.now()))
+                .moves(playerOneMoves)
+                .draw(draw)
+                .build();
+    }
+    public PlayerStat createPlayerTwoStat(String player){
+        return PlayerStat.builder()
+                .player(player)
+                .win(player.equals(winner))
+                .duration(Duration.between(startTime, Instant.now()))
+                .moves(playerTwoMoves)
+                .draw(draw)
+                .build();
+    }
+
     public void goToResults(javafx.event.ActionEvent actionEvent) throws IOException {
         String buttonText = ((Button) actionEvent.getSource()).getText();
         log.debug("{} is pressed", buttonText);
@@ -478,10 +522,10 @@ public class GameController {
         log.info("{} has offered a draw",actingPlayer);
         log.debug("Showing alert dialog");
 
-        Alert alert =new Alert(Alert.AlertType.NONE, actingPlayer+"has offered a draw. "+otherPlayer+", do you accept?", ButtonType.YES,ButtonType.NO);
+        Alert alert =new Alert(Alert.AlertType.NONE, actingPlayer+" has offered a draw. "+otherPlayer+", do you accept?", ButtonType.YES,ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
-            forfeit=true;
+            draw=true;
             log.info("{} has accepted the draw",otherPlayer);
             updateOnGameEnd(' ');
         }else{

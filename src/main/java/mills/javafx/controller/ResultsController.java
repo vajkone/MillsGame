@@ -118,5 +118,14 @@ public class ResultsController {
         stage.show();
     }
 
+    public void handleSearchPlayers(ActionEvent actionEvent) throws IOException {
+        log.debug("{} is pressed", ((Button) actionEvent.getSource()).getText());
+        log.info("Loading player statistics scene...");
+        fxmlLoader.setLocation(getClass().getResource("/fxml/playerStats.fxml"));
+        Parent root = fxmlLoader.load();
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 
 }

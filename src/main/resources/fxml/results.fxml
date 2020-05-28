@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -16,9 +17,17 @@
             <TableColumn fx:id="finished" prefWidth="197.0" text="Date" />
         </columns>
       </TableView>
-      <HBox layoutY="540.0" prefHeight="61.0" prefWidth="900.0">
+      <HBox layoutY="540.0" prefHeight="61.0" prefWidth="900.0" spacing="640.0">
          <children>
-            <Button fx:id="homeScreenButton" mnemonicParsing="false" onAction="#goToHomeScreen" prefHeight="58.0" prefWidth="118.0" text="Back to home screen" textAlignment="CENTER" wrapText="true">
+            <Button fx:id="homeScreenButton" mnemonicParsing="false" onAction="#goToHomeScreen" prefHeight="59.0" prefWidth="130.0" text="Back to home screen" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="searchPlayers" alignment="CENTER" contentDisplay="CENTER" layoutX="30.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleSearchPlayers" prefHeight="59.0" prefWidth="130.0" text="Search players" textAlignment="CENTER" wrapText="true" HBox.hgrow="SOMETIMES">
+               <HBox.margin>
+                  <Insets left="30.0" />
+               </HBox.margin>
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
