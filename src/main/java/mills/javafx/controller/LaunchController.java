@@ -52,6 +52,7 @@ public class LaunchController {
 
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
             stage.show();
             log.info("Player 1's name is set to {}", playerOneTF.getText());
             log.info("Player 2's name is set to {}, loading game scene", playerTwoTF.getText());
@@ -74,6 +75,7 @@ public class LaunchController {
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
+        stage.setResizable(true);
         stage.show();
 
     }

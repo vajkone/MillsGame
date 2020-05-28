@@ -55,7 +55,7 @@
    <Line layoutX="411.0" layoutY="200.0" rotate="90.0" startX="-40.0" />
    <Line layoutX="207.0" layoutY="200.0" rotate="90.0" startX="-40.0" />
    <Line layoutX="207.0" layoutY="265.0" rotate="90.0" startX="-40.0" />
-   <Label fx:id="phaseText" alignment="CENTER" layoutX="653.0" layoutY="17.0" prefHeight="45.0" prefWidth="148.0" text="Phase #" textAlignment="CENTER">
+   <Label fx:id="phaseText" alignment="CENTER" layoutX="628.0" layoutY="17.0" prefHeight="45.0" prefWidth="202.0" text="Phase #" textAlignment="CENTER" wrapText="true">
       <font>
          <Font size="24.0" />
       </font>
@@ -115,9 +115,9 @@
          <Font size="18.0" />
       </font>
    </Label>
-   <Button fx:id="resultsButton" alignment="CENTER" layoutX="771.0" layoutY="531.0" mnemonicParsing="false" onAction="#goToResults" prefHeight="46.0" prefWidth="106.0" text="See results" textAlignment="CENTER" visible="false">
+   <Button fx:id="resultsButton" alignment="CENTER" layoutX="750.0" layoutY="519.0" mnemonicParsing="false" onAction="#goToResults" prefHeight="58.0" prefWidth="127.0" text="See results" textAlignment="CENTER" visible="false" wrapText="true">
       <font>
-         <Font name="System Bold" size="16.0" />
+         <Font name="System Bold" size="14.0" />
       </font>
    </Button>
    <Button fx:id="giveUpButton" alignment="CENTER" layoutX="599.0" layoutY="323.0" mnemonicParsing="false" onAction="#handleGiveUp" prefHeight="75.0" prefWidth="130.0" text="Give up" wrapText="true">

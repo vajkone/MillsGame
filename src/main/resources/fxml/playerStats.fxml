@@ -8,7 +8,7 @@
    <children>
       <TextField fx:id="playerNameTf" layoutX="161.0" layoutY="388.0" promptText="Player name" />
       <Button fx:id="searchPlayerButton" layoutX="341.0" layoutY="388.0" mnemonicParsing="false" onAction="#handleSearchPlayer" prefHeight="25.0" prefWidth="136.0" text="Search player" />
-      <GridPane layoutX="131.0" layoutY="29.0" prefHeight="339.0" prefWidth="299.0">
+      <GridPane layoutX="151.0" layoutY="29.0" prefHeight="339.0" prefWidth="299.0">
         <columnConstraints>
           <ColumnConstraints fillWidth="false" hgrow="ALWAYS" minWidth="8.0" prefWidth="80.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -75,6 +75,6 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Button fx:id="goToLaunchButton" layoutX="14.0" layoutY="428.0" mnemonicParsing="false" onAction="#goToLaunchScreen" prefHeight="58.0" prefWidth="124.0" text="Go to launch screen" />
+      <Button fx:id="goToLaunchButton" layoutX="14.0" layoutY="428.0" mnemonicParsing="false" onAction="#goToLaunchScreen" prefHeight="58.0" prefWidth="124.0" text="Go to launch screen" textAlignment="CENTER" wrapText="true" />
    </children>
 </Pane>
